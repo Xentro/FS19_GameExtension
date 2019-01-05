@@ -1,9 +1,8 @@
+# GameExtension for Farming Simulator 19
+
+
 # Note
 More to come once the base is fully working.
- 
- 
- 
-# GameExtension for Farming Simulator 19
 
 
 # Description
