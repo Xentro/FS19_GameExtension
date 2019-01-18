@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="42">
+    <author>Xentro</author>
+    <version>0.5.0.0</version>
+	<title>
+		<en>Game Extension</en>
+		<de>Game Extension</de>
+	</title>
+	<description>
+		<en>
+			<![CDATA[Extends the game with more settings and features.]]>
+		</en>
+		<de>
+			<![CDATA[]]>
+		</de>
+	</description>
+
+	<iconFilename>store.dds</iconFilename>
+	<multiplayer supported="true" />
+	
+	<l10n filenamePrefix="translations/modDesc" />
+	
+	<actions>
+		<action name="TOGGLE_GUI_SCREEN" category="SYSTEM"/>
+		
+		<action name="X_CRUISE_ACTIVATE" category="VEHICLE"/>
+		<action name="X_CRUISE_DOWN" 	 category="VEHICLE"/>
+		<action name="X_CRUISE_UP" 		 category="VEHICLE"/>
+	</actions>
+	
+	<inputBinding>
+		<actionBinding action="TOGGLE_GUI_SCREEN">
+			<binding device="KB_MOUSE_DEFAULT" input="KEY_i" />
+			<binding device="0_XINPUT_GAMEPAD" input="BUTTON_5 BUTTON_9" />
+		</actionBinding>
+		
+		<actionBinding action="X_CRUISE_ACTIVATE">
+			<binding device="KB_MOUSE_DEFAULT" input="MOUSE_BUTTON_MIDDLE" index="3"/>
+		</actionBinding>
+		<actionBinding action="X_CRUISE_DOWN">
+			<binding device="KB_MOUSE_DEFAULT" input="MOUSE_BUTTON_RIGHT MOUSE_BUTTON_WHEEL_DOWN" index="3"/>
+		</actionBinding>
+		<actionBinding action="X_CRUISE_UP">
+			<binding device="KB_MOUSE_DEFAULT" input="MOUSE_BUTTON_RIGHT MOUSE_BUTTON_WHEEL_UP" index="3"/>
+		</actionBinding>
+   </inputBinding>
+   
+    <extraSourceFiles>
+        <sourceFile filename="scripts/GameExtension.lua"/>
+    </extraSourceFiles>
+	
+	<!-- 
+		ERROR 		= 0
+		WARNING 	= 1
+		NOTICE 		= 2
+		DEBUG 		= 3
+	-->
+	<gameExtension debug="3">
+        <sourceFile filename="scripts/modules/Misc.lua"/>
+        <sourceFile filename="scripts/modules/Player.lua"/>
+        <!-- <sourceFile filename="scripts/modules/Vehicle.lua"/> -->
+	</gameExtension>
+	
+	<!--
+	l10nNameTag			- Optional 					- Make text global so we can use it on the mod. Name it like following in modDesc GAME_EXTENSION_01, GAME_EXTENSION_02... 
+	debug							- True / False	- Log the work flow 
+	
+	The following tags can be used multiply times
+	
+	vehicleTypeLimit	- Optional 	- True / False 	- Limit to what vehicle type to add specialization into, True = Add to this type, False = Don't add to this type. Remove tag if not used.
+	restrictions					- 0 / 1 		- Specialization which we must/can't have.
+	searchWords						- 0 / 1			- This will search for an match for this word in the specialization name
+	
+	0 = Required specialization
+	1 = Unallowed specialization
+	-->
+	
+	<addSpecialization>
+		<specialization name="GameExtension" className="GameExtensionSpecialization" filename="scripts/GameExtensionSpecialization.lua" l10nNameTag="GAME_EXTENSION" debug="false">
+			<vehicleTypeLimit state="false" name="pallet" />
+			<vehicleTypeLimit state="false" name="buyableBale" />
+			<vehicleTypeLimit state="false" name="horse" />
+			<!-- <restrictions state="0" name="drivable" /> -->
+			<!-- <searchWords 	  state="1" name="spec" /> -->
+		</specialization>
+	</addSpecialization>
+</modDesc>

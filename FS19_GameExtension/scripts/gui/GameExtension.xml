@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<GUI onOpen="onOpen" onClose="onClose">
+	<!-- File dont seem to load - <GuiElement type="bitmap" profile="backgroundImageIngame" /> - uiElementBg -->
+	<GuiElement type="bitmap" profile="pageBackground" />
+	
+	<GuiElement type="bitmap" profile="uiInGameMenuHeader">
+		<GuiElement type="multiTextOption" profile="uiInGameMenuHeaderSelector" onCreate="onCreatePageSelection" onClick="onClickUpdatePageSelection">
+			<GuiElement type="button" profile="uiInGameMenuPagingButtonLeft" />
+			<GuiElement type="button" profile="uiInGameMenuPagingButtonRight"/>
+			<GuiElement type="text" profile="pageSelectionHeaderText" text="Paging" />
+		</GuiElement>
+		
+		<GuiElement type="flowLayout" profile="pageMarkerBox" onCreate="onCreateMarkerParent">
+			<GuiElement type="bitmap" profile="pageMarkerState" onCreate="onCreateMarkerTemplate" />
+		</GuiElement>
+	</GuiElement>
+	
+	<GuiElement type="bitmap" profile="uiElementContainerFullScreenSpanning" size="1920px 1080px">
+		<GuiElement type="empty" profile="uiInGameMenuFrame">
+			<GuiElement type="empty" profile="uiInGameMenuPaging" onCreate="onCreateMainPage">
+				<!-- Setting Page -->
+				<GuiElement type="empty" profile="ingameMenuSettingsBox" position="130px -237px" name="settings" onCreate="onCreatePageTemplate">
+					<GuiElement type="boxLayout" profile="ingameMenuSettingsLayout" position="50px -50px" onCreate="onCreateSettingTemplate">
+						<GuiElement type="checkedOption" profile="multiTextOptionSettings" onCreate="onCreateSettingItem" onClick="setSetting" onFocus="onFocusEnterSettingItem" toolTip="willBeReplaced">
+							<GuiElement type="button" profile="multiTextOptionLeft" />
+							<GuiElement type="button" profile="multiTextOptionRight"/>
+							<GuiElement type="text"   profile="multiTextOptionText" />
+							<GuiElement type="text"   profile="multiTextOptionTitle" />
+							<GuiElement type="bitmap" profile="multiTextOptionBg" />
+						</GuiElement>
+					</GuiElement>
+				</GuiElement>
+				
+				<!-- Login Page -->
+				<GuiElement type="empty" profile="ingameMenuSettingsBox" position="130px -237px" name="login" onCreate="onCreateLogin" visible="false">
+					<GuiElement type="text" profile="loginText" text="$l10n_PAGE_LOGIN" />
+					<!-- <GuiElement type="button" profile="multiplayerLogin" onClick="onClickLogin" text="$l10n_button_adminLogin" /> -->
+				</GuiElement>
+				
+				<!-- Help Page -->
+				<GuiElement type="empty" profile="helpPage" id="helpContainer" onCreate="onCreatePageHelp">
+					<GuiElement type="text" profile="loginText" text="Place holder, More to come." />
+				</GuiElement>
+			</GuiElement>
+			
+			<!-- Help Text Bar -->
+			<GuiElement type="bitmap" profile="ingameMenuHelpRowBg" position="210px 64px" onCreate="onCreateHelpBox" visible="false">
+				<GuiElement type="bitmap" profile="ingameMenuHelpRowIcon" />
+				<GuiElement type="text" profile="ingameMenuHelpRowText" text="" />
+			</GuiElement>
+		</GuiElement>
+	</GuiElement>
+	
+	<GuiElement type="flowLayout" profile="buttonBoxDocked" screenAlign="bottomLeft" positionOrigin="bottomLeft" position="130px 77px" id="buttonsPanel">
+		<GuiElement type="button" profile="buttonBack" text="$l10n_button_back" onCreate="onCreateBackButton" onClick="onClickBack" />
+		<!-- This needs more work before activating it. -->
+		<!-- <GuiElement type="button" profile="buttonServerDetails" text="" onCreate="onCreateHelpButton" onClick="onClickHelp" /> -->
+	</GuiElement>
+</GUI>
