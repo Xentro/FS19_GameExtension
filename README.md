@@ -7,6 +7,15 @@ To Do
 ## Help
 There is an included readme file which have the information you need such as how to use the feature and what it does.
 
+If you find all the debug text in the log an mess then open the modDesc.xml file and change this line
+```
+<gameExtension debug="3">
+```
+to
+```
+<gameExtension debug="2">
+```
+
 
 ## Development version
 This is an mod which are under development and can/will contain issues of various sizes, you have been warned.
