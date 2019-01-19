@@ -213,7 +213,7 @@ function GameExtension:getLockState(moduleName, settingName, s)
 		s = self:getSetting(moduleName, settingName, true);
 	end;
 	
-	return s.isLockedByForce;
+	return s.isLocked or s.isLockedByForce;
 end;
 
 function GameExtension:lockSetting(moduleName, settingName, lock, force)
