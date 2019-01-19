@@ -209,13 +209,11 @@ end;
 
 
 function GameExtension:getLockState(moduleName, settingName, s)
-	if s ~= nil then
-		return s.isLocked or s.isLockedByForce;
-	else
+	if s == nil then
 		s = self:getSetting(moduleName, settingName, true);
 	end;
 	
-	return false;
+	return s.isLockedByForce;
 end;
 
 function GameExtension:lockSetting(moduleName, settingName, lock, force)

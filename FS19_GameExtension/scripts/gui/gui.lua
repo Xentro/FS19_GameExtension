@@ -38,6 +38,7 @@ function GameExtensionGUI:new(target, custom_mt)
 		server = {pageName = g_i18n:getText("SERVER_SETTING_PAGE"), isAdminPage = true,  settings = {}}
 	};
 	self.draftPageIntToName = {"client", "server"};
+	self.settingNameToIndex = {};
 	
 	self.isOpen 			= false; -- Used for dialog fix
 	self.currentPage 		= 1;
@@ -153,21 +154,44 @@ function GameExtensionGUI:addSettingsToPage(name, v)
 		if v.pageName ~= nil and v.isAdminPage ~= nil and v.settings ~= nil then
 			self.draftPages[name] = v;
 			table.insert(self.draftPageIntToName, name);
+			
+			for i, v in ipairs(self.draftPages[name].settings) do
+				if self:checkName(v.name) then
+					self.settingNameToIndex[v.name:lower()] = i;
+				else
+					table.remove(self.draftPages[name].settings, i);
+				end;
+			end;
 		else
 			log("ERROR", "GUI - The page your trying to add ( " .. name .. " ) is missing data and won't be created.");
 		end;
 	else
 		if v.name ~= nil then
 			-- One setting
-			table.insert(self.draftPages[name].settings, v);
-		
+			if self:checkName(v.name) then
+				table.insert(self.draftPages[name].settings, v);
+				self.settingNameToIndex[v.name:lower()] = #self.draftPages[name].settings;
+			end;
+			
 		elseif v.settings ~= nil then
 			-- Multiply settings
 			for _, v in ipairs(v.settings) do
-				table.insert(self.draftPages[name].settings, v);
+				if self:checkName(v.name) then
+					table.insert(self.draftPages[name].settings, v);
+					self.settingNameToIndex[v.name:lower()] = #self.draftPages[name].settings;
+				end;
 			end;
 		end;
 	end;
+end;
+
+function GameExtensionGUI:checkName(name)
+	if self.settingNameToIndex[name] ~= nil then
+		log("ERROR", "The setting name your trying to add ( " .. name .. " ) is already added, it must be an unique name.");
+		return false;
+	end;
+	
+	return true;
 end;
 
 
@@ -665,4 +689,15 @@ end;
 
 function GameExtensionGUI:getPage(name)
 	return self.draftPages[name];
+end;
+
+function GameExtensionGUI:getSetting(pageName, name)
+	pageName = pageName:lower();
+	name = name:lower();
+	
+	if self.draftPages[pageName] ~= nil and self.settingNameToIndex[name] ~= nil then
+		return self.draftPages[pageName].settings[self.settingNameToIndex[name]];
+	end;
+	
+	return nil;
 end;
