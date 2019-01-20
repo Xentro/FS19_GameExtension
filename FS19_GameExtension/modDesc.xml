@@ -71,17 +71,19 @@
 	restrictions					- 0 / 1 		- Specialization which we must/can't have.
 	searchWords						- 0 / 1			- This will search for an match for this word in the specialization name
 	
-	0 = Required specialization
-	1 = Unallowed specialization
+	0 = Required specialization, all of these must be found to pass
+	1 = Unallowed specialization, fail if any of these are found
+	2 = Allowed specialization, if any of these are found then it will pass the checks
 	-->
 	
 	<addSpecialization>
 		<specialization name="GameExtension" className="GameExtensionSpecialization" filename="scripts/GameExtensionSpecialization.lua" l10nNameTag="GAME_EXTENSION" debug="false">
-			<vehicleTypeLimit state="false" name="pallet" />
-			<vehicleTypeLimit state="false" name="buyableBale" />
-			<vehicleTypeLimit state="false" name="horse" />
-			<!-- <restrictions state="0" name="drivable" /> -->
-			<!-- <searchWords 	  state="1" name="spec" /> -->
+			<!-- Cruise Control -->
+			<restrictions state="2" name="drivable" />
+			<!-- Vehicle Hud -->
+			<restrictions state="2" name="motorized" />
+			<restrictions state="2" name="trailer" />
+			<restrictions state="2" name="baler" />
 		</specialization>
 	</addSpecialization>
 </modDesc>
