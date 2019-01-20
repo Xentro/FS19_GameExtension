@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+	<texts>
+	<!-- GUI -->
+		<text name="input_TOGGLE_GUI_SCREEN" 		text="Game Extension: Przełączanie GUI" />
+		<text name="TOGGLE_GUI_SCREEN" 				text="Otwórz menu Game Extension" />
+		<text name="CLIENT_SETTING_PAGE" 			text="Ustawienia klienta" />
+		<text name="SERVER_SETTING_PAGE" 			text="Ustawienia serwera" />
+		
+		<text name="PAGE_HELP" 						text="Strona pomocy" />
+		<text name="PAGE_SETTING"	 				text="Strona ustawień" />
+		
+		<text name="SETTING_ACTIVATED" 				text="Aktywne" />
+		<text name="SETTING_DEACTIVATED" 			text="Nieaktywne" />
+		<text name="PAGE_LOGIN" 					text="Musisz się zalogować, aby mieć dostęp do tej strony!
+Zaloguj się jako admin serwera za pomocą menu Zarządzanie gospodarstwem." />
+
+	<!-- Modules -->
+		<!-- Misc -->
+		<text name="VEHICLE_TABBING" 				text="Przełączanie na pojazdy" />
+		<text name="toolTip_VEHICLE_TABBING" 		text="Włącza/wyłącza możliwość przełączania się na pojazdy (Ciągniki, kombajny, samochody osobowe i ciężarowe, itd.)" />
+		
+		<!-- Player -->
+		<text name="P_STRENGTH" 					text="Siła farmera" />
+		<text name="P_STRENGTH_SET_UNLIMITED"		text="Nielimitowana" />
+		<text name="toolTip_P_STRENGTH" 			text="Jak ciężki obiekt będzie w stanie podnieść farmer." />
+		<text name="P_DISTANCE" 					text="Odległość chwytu farmera" />
+		<text name="toolTip_P_DISTANCE" 			text="Jak daleko farmer sięgnie po obiekt." />
+		<text name="P_CROSSHAIR" 					text="Celownik" />
+		<text name="toolTip_P_CROSSHAIR" 			text="Ustawia widoczność celownika" />
+		
+		<!-- Vehicle -->
+		<text name="V_HUD_ACTIVE" 					text="Ikony HUDa pojazdu" />
+		<text name="toolTip_V_HUD_ACTIVE" 			text="Ikony pomocy wizualnej dla pojazdów." />
+		
+		<!-- Cruise Control - Client -->
+		<text name="input_X_CRUISE_ACTIVATE" 		text="Game Extension: Przełączanie tempomatu" />
+		<text name="input_X_CRUISE_DOWN" 			text="Game Extension: Zmniejsz prędkość" />
+		<text name="input_X_CRUISE_UP" 				text="Game Extension: Zwiększ prędkość" />
+		<text name="CRUISE_ACTIVE" 					text="Tempomat" />
+		<text name="toolTip_CRUISE_ACTIVE" 			text="Sterowanie tempomatem za pomocą myszki" />
+		<text name="CRUISE_SCROOL_SPEED" 			text="Przeskok prędkości tempomatu" />
+		<text name="toolTip_CRUISE_SCROOL_SPEED" 	text="Co jaką wartość będzie ustawiana nowa prędkość tempomatu." />
+	</texts>
+</l10n>
