@@ -45,7 +45,7 @@ function GameExtension:loadMap()
 	g_gui:loadProfiles(folderPaths.gui .. "guiProfiles.xml");
 	g_gui:loadGui(folderPaths.gui .. "GameExtension.xml", "gameExtensionGUI", g_gameExtensionGUI);
 	
-	self:callFunction("loadMap", {});
+	self:callFunction("loadMap");
 	
 	-- Load saved settings
 	if g_currentMission:getIsServer() and g_currentMission.missionInfo.isValid then
@@ -58,7 +58,7 @@ function GameExtension:loadMap()
 end;
 
 function GameExtension:deleteMap()
-	self:callFunction("deleteMap", {});
+	self:callFunction("deleteMap");
 	
 	g_gameExtensionGUI:delete();
 	g_gameExtensionGUI = nil;
@@ -95,10 +95,10 @@ function GameExtension:update(dt)
 		end;
 	end;
 	
-	self:callFunction("update", {dt});
+	self:callFunction("update", dt);
 	
 	if self.updateTickRate.current >= self.updateTickRate.limit then
-		self:callFunction("updateTick", {dt});
+		self:callFunction("updateTick", dt);
 		self.updateTickRate.current = 0;
 	else
 		self.updateTickRate.current = self.updateTickRate.current + 1;

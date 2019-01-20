@@ -153,22 +153,22 @@ function GameExtension:addSpecialization(name, filename)
 	end;
 end;
 
-function GameExtension:callSpecializationFunction(vehicle, name, values)
+function GameExtension:callSpecializationFunction(vehicle, name, ...)
 	for n, v in pairs(self.specializations) do
 		if not v.stopCall and v.object[name] ~= nil then
-			v.object[name](vehicle, unpack(values));
+			v.object[name](vehicle, ...);
 		end;
 	end;
 end;
 
 
-function GameExtension:callFunction(name, values)
+function GameExtension:callFunction(name, ...)
 	for i, v in ipairs(self.modules) do
 		if v.isActive and v.object ~= nil and v.object[name] ~= nil then
 			if v.callLocal then
-				v.object[name](v.object, unpack(values));
+				v.object[name](v.object, ...);
 			else
-				v.object[name](self, unpack(values));
+				v.object[name](self, ...);
 			end;
 		end;
 	end;

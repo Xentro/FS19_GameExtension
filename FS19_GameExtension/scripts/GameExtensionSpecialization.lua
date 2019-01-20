@@ -48,7 +48,7 @@ function GameExtensionSpecialization.registerEventListeners(vehicleType)
 		end;
 	end;
 	
-	g_gameExtension:callSpecializationFunction(nil, "registerEventListeners", {vehicleType});
+	g_gameExtension:callSpecializationFunction(nil, "registerEventListeners", vehicleType);
 end;
 
 function GameExtensionSpecialization:onPreLoad(savegame)
