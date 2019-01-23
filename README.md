@@ -1,9 +1,5 @@
 # GameExtension for Farming Simulator 19
 
-## Description
-To Do
-
-
 ## Help
 There is an included readme file which have the information you need such as how to use the feature and what it does.
 
