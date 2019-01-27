@@ -17,6 +17,7 @@ M_Misc = {};
 
 
 local settings = {};
+settings = g_gameExtension:addSetting(settings, { name = "SHOW_HELP_BUTTON", 		page = "Client", value = true, b = g_gameExtension.BL_STATE_NORMAL, f = "setShowHelpButton" });
 settings = g_gameExtension:addSetting(settings, { name = "VEHICLE_TABBING", 		page = "Server", value = true, b = g_gameExtension.BL_STATE_NORMAL, f = "setTabState" });
 
 settings = g_gameExtension:addSetting(settings, { name = "CRUISE_ACTIVE", 			page = "Client", value = true, b = g_gameExtension.BL_STATE_NORMAL, f = "changeCruiseControlState" });
@@ -24,7 +25,7 @@ settings = g_gameExtension:addSetting(settings, { name = "CRUISE_SCROOL_SPEED", 
 	options = {4, 1, 5}
 });
 
-g_gameExtension:addModule("Misc", M_Misc, settings, false);
+g_gameExtension:addModule("MISC", M_Misc, settings, false);
 
 g_gameExtension:addSpecialization("Cruise_Control", Utils.getFilename("Cruise_Control.lua", folderPaths.vehicles));
 
@@ -45,14 +46,22 @@ function M_Misc:deleteMap()
 end;
 
 
-function M_Misc:changeCruiseControlState(state)
-	if g_currentMission.controlledVehicle ~= nil then
-		if g_currentMission.controlledVehicle.updateCruiseActionEvents ~= nil then
-			g_currentMission.controlledVehicle:updateCruiseActionEvents(state);
+function M_Misc:setShowHelpButton(state)
+	for name, v in pairs(self.actionEventInfo) do
+		if v.text ~= nil and v.text ~= "" then
+			g_inputBinding:setActionEventTextVisibility(v.eventId, state);
 		end;
 	end;
 end;
 
 function M_Misc:setTabState(state)
 	g_currentMission.isToggleVehicleAllowed = state;
+end;
+
+function M_Misc:changeCruiseControlState(state)
+	if g_currentMission.controlledVehicle ~= nil then
+		if g_currentMission.controlledVehicle.updateCruiseActionEvents ~= nil then
+			g_currentMission.controlledVehicle:updateCruiseActionEvents(state);
+		end;
+	end;
 end;

@@ -2,17 +2,11 @@
 <modDesc descVersion="42">
     <author>Xentro</author>
     <version>0.5.0.0</version>
-	<title>
-		<en>Game Extension</en>
-		<de>Game Extension</de>
-	</title>
+	<title><en>Game Extension</en></title>
+	
 	<description>
-		<en>
-			<![CDATA[Extends the game with more settings and features.]]>
-		</en>
-		<de>
-			<![CDATA[]]>
-		</de>
+		<en><![CDATA[Improve the game with new features and an ingame menu where you will be able to change how the features work.]]></en>
+		<!-- TODO, Include translations -->
 	</description>
 
 	<iconFilename>store.dds</iconFilename>

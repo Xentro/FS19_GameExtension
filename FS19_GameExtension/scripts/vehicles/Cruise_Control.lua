@@ -40,7 +40,7 @@ function Cruise_Control:onRegisterActionEvents(isActiveForInput, isActiveForInpu
 			_, eventId = self:addActionEvent(spec.actionEvents, InputAction.X_CRUISE_DOWN, self, Cruise_Control.onCruiseActionSpeed, false, true, false, true, nil, nil, true);
 			_, eventId = self:addActionEvent(spec.actionEvents, InputAction.X_CRUISE_UP, self, Cruise_Control.onCruiseActionSpeed, false, true, false, true, nil, nil, true);
 			
-			self:updateCruiseActionEvents(g_gameExtension:getSetting("Misc", "CRUISE_ACTIVE"));
+			self:updateCruiseActionEvents(g_gameExtension:getSetting("MISC", "CRUISE_ACTIVE"));
 		end;
 	end;
 end;
@@ -71,6 +71,16 @@ function Cruise_Control:onCruiseAction(actionName, inputValue, callbackState, is
 					self:setCruiseControlMaxSpeed(spec.cruiseControl.maxSpeed);
 				end;
 				
+				if spec.speed ~= spec.speedSent then
+					if g_server ~= nil then
+						g_server:broadcastEvent(SetCruiseControlSpeedEvent:new(self, spec.speed), nil, nil, self);
+					else
+						g_client:getServerConnection():sendEvent(SetCruiseControlSpeedEvent:new(self, spec.speed));
+					end;
+					
+					spec.speedSent = spec.speed;
+				end;
+				
 				spec.cruiseControl.customTopSpeedTimer = Cruise_Control.SPEED_TIMER_STOP;
 			end;
 			
@@ -99,14 +109,22 @@ function Cruise_Control:onCruiseActionSpeed(actionName, inputValue, callbackStat
 end;
 
 function Cruise_Control:updateCruiseSpeed(dir)
-	local speed = g_gameExtension:getSetting("Misc", "CRUISE_SCROOL_SPEED");
+	local speed = g_gameExtension:getSetting("MISC", "CRUISE_SCROOL_SPEED");
 	
 	local spec = self.spec_drivable.cruiseControl;
 	spec.changeCurrentDelay = spec.changeCurrentDelay + speed * (spec.changeMultiplier * dir);
 	spec.changeMultiplier = MathUtil.clamp(spec.changeMultiplier + speed * dir, 0, 10);
 	
-	spec.wasSpeedChanged = true; -- no purpose, dont hurt to keep it.
 	self:setCruiseControlMaxSpeed(spec.speed + (speed * dir));
 	spec.changeCurrentDelay = spec.changeDelay;
-	-- speed will be updated for MP on the next frame by default script.
+	
+	if spec.speed ~= spec.speedSent then
+		if g_server ~= nil then
+			g_server:broadcastEvent(SetCruiseControlSpeedEvent:new(self, spec.speed), nil, nil, self);
+		else
+			g_client:getServerConnection():sendEvent(SetCruiseControlSpeedEvent:new(self, spec.speed));
+		end;
+		
+		spec.speedSent = spec.speed;
+	end;
 end;

@@ -71,9 +71,7 @@ function GameExtension:update(dt)
 			g_gameExtensionGUI:loadSettings();
 		end;
 		
-		if not g_currentMission.hud.isMenuVisible then
-			self:renderVisualDebugMessages();
-		end;
+		self:renderVisualDebugMessages();
 		
 	else
 		for name, v in pairs(GameExtension.classOverrides) do
@@ -111,9 +109,11 @@ function GameExtension:registerActionEvents()
 	for name, v in pairs(g_gameExtension.actionEventInfo) do
 		local eventAdded, eventId = g_inputBinding:registerActionEvent(name, g_gameExtension, v.callback, v.triggerUp, v.triggerDown, v.triggerAlways, v.startActive, v.callbackState);
 		
+		v.eventId = eventId;
+		
 		if v.text ~= nil and v.text ~= "" then
 			g_inputBinding:setActionEventText(eventId, v.text);
-			g_inputBinding:setActionEventTextVisibility(eventId, true);
+			g_inputBinding:setActionEventTextVisibility(eventId, g_gameExtension:getSetting("MISC", "SHOW_HELP_BUTTON"));
 		end;
 		
 		if not eventAdded then

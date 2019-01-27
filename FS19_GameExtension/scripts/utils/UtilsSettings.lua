@@ -156,14 +156,24 @@ function GameExtension:getSetting(name, settingName, getTable)
 	if type(name) == "string" then
 		m = self:getModule(name);
 	end;
-
-	local idx = self.settingToIndex[settingName];
 	
-	if not getTable then
-		return m.settings[idx].value;
+	if m ~= nil then
+		local idx = self.settingToIndex[settingName];
+		
+		if idx ~= nil then
+			if not getTable then
+				return m.settings[idx].value;
+			else
+				return m.settings[idx];
+			end;
+		else
+			log("ERROR", "Setting ( " .. tostring(settingName) .. " ) Don't exist.");
+		end;
 	else
-		return m.settings[idx];
+		log("ERROR", "Module ( " .. tostring(name) .. " ) Don't exist.");
 	end;
+	
+	return nil;
 end;
 
 function GameExtension:setSetting(moduleName, name, newValue, noEventSend, firstLoad)
@@ -172,30 +182,37 @@ function GameExtension:setSetting(moduleName, name, newValue, noEventSend, first
 	if m ~= nil and name ~= nil then
 		if not firstLoad then
 			local s = self:getSetting(m, name, true);
-			s.value = newValue;
 			
-			if s.func ~= nil then
-				if s.parent ~= nil then -- We are custom, we can't use object since it could be wrong.
-					s.parent[s.func](s.parent, newValue); -- Call custom setting function
-				else		
-					if m.callLocal then
-						m.object[s.func](m.object, newValue); 			-- This limit us to the class only
+			if s ~= nil then
+				s.value = newValue;
+				
+				if s.func ~= nil then
+					if s.parent ~= nil and s.parent[s.func] ~= nil then -- We are custom, we can't use object since it could be wrong.
+						s.parent[s.func](s.parent, newValue); -- Call custom setting function
+					elseif m.object[s.func] ~= nil then
+						if m.callLocal then
+							m.object[s.func](m.object, newValue); 			-- This limit us to the class only
+						else
+							m.object[s.func](self, newValue); 				-- Let us access everything within Game Extension
+						end;
 					else
-						m.object[s.func](self, newValue); 				-- Let us access everything within Game Extension
+						log("ERROR", "The function ( " .. s.func .. " ) for setting ( " .. name .. " ) don't exist.");
 					end;
 				end;
-			end;
-			
-			if g_gameExtension.firstTimeRun then
-				if s.event then
-					SetSettingEvent.sendEvent(moduleName, name, s.inputType, newValue, noEventSend);
-				else
-					-- Save client settings when they are changed but only once everything is loaded and ready to go.
-					if g_currentMission:getIsClient() and g_dedicatedServerInfo == nil then
-						log("DEBUG", "Attempting to save client settings to xml file.")
-						self:saveFile(self.filenames.client, false);
+				
+				if g_gameExtension.firstTimeRun then
+					if s.event then
+						SetSettingEvent.sendEvent(moduleName, name, s.inputType, newValue, noEventSend);
+					else
+						-- Save client settings when they are changed but only once everything is loaded and ready to go.
+						if g_currentMission:getIsClient() and g_dedicatedServerInfo == nil then
+							log("DEBUG", "Attempting to save client settings to xml file.")
+							self:saveFile(self.filenames.client, false);
+						end;
 					end;
 				end;
+			else
+				-- Setting don't exist
 			end;
 		else
 			-- Setup setting
@@ -204,6 +221,9 @@ function GameExtension:setSetting(moduleName, name, newValue, noEventSend, first
 			
 			log("DEBUG", "Adding setting type: " .. m.settings[self.settingToIndex[name]].inputType .. ",	" .. name .. ",		value: " .. tostring(m.settings[self.settingToIndex[name]].value));
 		end;
+	else
+		-- Module don't exist
+		-- log("ERROR", "Trying to change value for an setting in the module ( " .. tostring(moduleName) .. " ) but it doesn't exist.");
 	end;
 end;
 
@@ -283,8 +303,6 @@ function GameExtension:saveFile(filename, isServer)
 		else
 			log("DEBUG", "Saved Settings - xmlFile ID: " .. xmlFile .. " - File Exists: " .. tostring(fileExists(filename)) .. " - File Path: " .. filename);
 		end;
-	-- else
-		-- log("DEBUG", "Failed to save xml for " .. tostring(filename));
 	end;
 	
 	delete(xmlFile);
@@ -314,10 +332,8 @@ function GameExtension:loadSettingXML(xmlPath)
 					loadstring("f=getXML" .. inputType)();
 					value = f(xmlFile, subKey .. "#value");
 					
-					-- log("DEBUG", "value: " .. tostring(value) .. " - " .. type(value));
-					
 					if value ~= nil then
-						g_gameExtension:setSetting(moduleName, name, value, true);
+						g_gameExtension:setSetting(moduleName, name, value, true); -- We check if names exist in function
 					end;
 					
 					subI = subI + 1;
@@ -346,5 +362,4 @@ function GameExtension:saveSavegame(superFunc, ...)
 	
 	-- Don't save client settings here as they are auto saved 
 end;
--- GameExtension.addClassOverride("OVERRIDE_SAVE_GAME", "saveSavegame", g_careerScreen, GameExtension.saveSavegame);
 GameExtension:addClassOverride("OVERRIDE_SAVE_GAME", "onSaveComplete", SavegameController, GameExtension.saveSavegame);
