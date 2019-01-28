@@ -37,12 +37,14 @@ function M_Misc:loadMap()
 end;
 
 function M_Misc:deleteMap()
-	for _, system in ipairs(g_currentMission.customTrackSystem) do
-		system:delete();
+	if g_currentMission.customTrackSystem ~= nil then
+		for _, system in ipairs(g_currentMission.customTrackSystem) do
+			system:delete();
+		end;
+		
+		g_currentMission.customTrackController = nil;
+		g_currentMission.customTrackSystem 	   = nil;
 	end;
-	
-	g_currentMission.customTrackController = nil;
-	g_currentMission.customTrackSystem 	   = nil;
 end;
 
 

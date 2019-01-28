@@ -40,28 +40,25 @@ function M_Player:loadMap()
 		self:addBlackListItem("P_SHOW_CHAT", GameExtension.BL_STATE_DONT_SHOW);
 		self:addBlackListItem("P_SHOW_PLAYER_NAMES", GameExtension.BL_STATE_DONT_SHOW);
 	end;
-	
 end;
 
 function M_Player:update(dt)
-	if g_currentMission:getIsClient() then
-		if not self.firstTimeRun then
-			-- addMessage("lastChatMessageTime", g_currentMission);
-			-- addMessage("time", g_currentMission);
-			-- addMessage("hideTime", g_currentMission.hud.chatWindow);
-			
-			-- addMessage("isMenuVisible:", g_currentMission.hud, "isMenuVisible");
-			-- addMessage("isVisible:", g_currentMission.hud, "isVisible");
-		else
-			-- showMessage("currentGuiName", g_gui.currentGuiName);
-			
-			-- We could look for an better solution - SpeakerDisplay.onChatVisibilityChange()
-			if g_gui:getIsGuiVisible() and g_gui.currentGuiName == "ChatDialog" then
-				if not self:getSetting("PLAYER", "P_SHOW_CHAT") then
-					g_gui:showGui("");
-				end;
+	if not self.firstTimeRun then
+		-- We do it here since we couldn't find it by doing this in loadMap
+		for _, v in pairs(g_inputBinding.events) do
+			if v.actionName == "CHAT" then
+				self.chatEventId = v.id;
+				g_inputBinding:setActionEventActive(self.chatEventId, self:getSetting("PLAYER", "P_SHOW_CHAT")); -- Update according to setting.
+				break;
 			end;
 		end;
+		
+		addMessage("lastChatMessageTime", g_currentMission);
+		addMessage("time", g_currentMission);
+		addMessage("hideTime", g_currentMission.hud.chatWindow);
+		
+		-- addMessage("isMenuVisible:", g_currentMission.hud, "isMenuVisible");
+		-- addMessage("isVisible:", g_currentMission.hud, "isVisible");
 	end;
 end;
 
@@ -173,17 +170,21 @@ end;
 function M_Player:setShowChatWindow(state)
 	g_currentMission.hud.chatWindow.hideTime = -1;
 	g_currentMission.lastChatMessageTime = 0;
+	
+	if self.chatEventId ~= nil then
+		g_inputBinding:setActionEventActive(self.chatEventId, state);
+	end;
 end;
 
 function M_Player.setLastChatMessageTime(self, oldFunc, ...)
-	if g_currentMission:getIsClient() then
+	-- if g_currentMission:getIsClient() then
 		if g_gameExtension:getSetting("PLAYER", "P_SHOW_CHAT") then
 			oldFunc(self, ...);
 		else
 			g_currentMission.hud.chatWindow.hideTime = -1;	-- This hide the messages
 			g_currentMission.lastChatMessageTime = 0;		-- What this does is the question.. its updated when chatDialog is open
 		end;
-	end;
+	-- end;
 end;
 g_gameExtension:addClassOverride("OVERRIDE_SHOW_CHAT", "setLastChatMessageTime", Mission00, M_Player.setLastChatMessageTime);
 

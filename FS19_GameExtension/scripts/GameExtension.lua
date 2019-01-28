@@ -60,9 +60,12 @@ end;
 function GameExtension:deleteMap()
 	self:callFunction("deleteMap");
 	
-	g_gameExtensionGUI:delete();
-	g_gameExtensionGUI = nil;
-	g_gameExtension	   = nil;
+	if g_gameExtensionGUI ~= nil then
+		g_gameExtensionGUI:delete();
+		g_gameExtensionGUI = nil;
+	end;
+	
+	g_gameExtension	= nil;
 end;
 
 function GameExtension:update(dt)
@@ -153,3 +156,13 @@ else
 	log("ERROR", "There are multiply versions of this mod! This mod ( " .. GameExtension.modName .. " ) will now be disabled.");
 	GameExtension = nil;
 end;
+
+
+function testtest(self, oldFunc, name, ...)
+	local eventAdded, eventId = oldFunc(self, name, ...);
+	
+	print("-- registerActionEvent: " .. name .. " - eventId: " .. tostring(eventId));
+	
+	return eventAdded, eventId;
+end;
+-- InputBinding.registerActionEvent = Utils.overwrittenFunction(InputBinding.registerActionEvent, testtest);
