@@ -59,7 +59,7 @@ function GameExtension:addModule(name, object, settings, callClassLocally)
 			name 			= name,
 			object 			= object,
 			isActive		= true,
-			callLocal		= callClassLocally == nil, -- If you do set this to false beware that function call in your class will not work like this class:function(), it will have to be predefined in the self table.
+			callLocal		= callClassLocally == nil, -- If you do set this to false beware that function call in your class will not work like this class:function(), it will have to be predefined in the self table. Example self.function = class.function.
 			settings 		= Utils.getNoNil(settings, {})
 		};
 		
@@ -83,7 +83,6 @@ end;
 
 
 -- Settings --
-
 
 function GameExtension:addSetting(settings, t)
 	local blackListState = Utils.getNoNil(t.b, GameExtension.BL_STATE_NORMAL);
@@ -125,7 +124,11 @@ function GameExtension:addSetting(settings, t)
 		end;
 		
 		if t.options ~= nil then
-			entry.options = self:getOptions(t.options);
+			if t.options.isText ~= nil then
+				entry.options = t.options;
+			else
+				entry.options = self:getOptions(t.options);
+			end;
 		elseif t.optionsText ~= nil then
 			entry.options = self:getOptionsText(t.optionsText);
 		end;

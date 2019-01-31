@@ -32,10 +32,10 @@ Login as server admin trough the Farm Management menu." />
 		<text name="toolTip_P_DISTANCE" 			text="How far away we can grab the object." />
 		<text name="P_CROSSHAIR" 					text="Player crosshair" />
 		<text name="toolTip_P_CROSSHAIR" 			text="Sets the visibility of crosshair." />
-		<text name="P_SHOW_CHAT" 					text="Show chat window" />
-		<text name="toolTip_P_SHOW_CHAT" 			text="Whether or not the chat window should appear when a player has written a message." />
-		<text name="P_SHOW_PLAYER_NAMES" 			text="Show player names" />
-		<text name="toolTip_P_SHOW_PLAYER_NAMES" 	text="Whether or not the player name should be showing above the character head." />
+		<text name="P_HIDE_CHAT" 					text="Hide chat window" />
+		<text name="toolTip_P_HIDE_CHAT" 			text="Whether or not the chat window should appear when a player has written a message." />
+		<text name="P_HIDE_PLAYER_NAMES" 			text="Hide player names" />
+		<text name="toolTip_P_HIDE_PLAYER_NAMES" 	text="Whether or not the player name should be showing above the character head." />
 		
 		<!-- Vehicle -->
 		<text name="V_HUD_ACTIVE" 					text="Vehicle hud icons" />

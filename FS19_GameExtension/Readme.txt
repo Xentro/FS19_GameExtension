@@ -30,11 +30,11 @@ It´s not allowed to edit this Mod ( package ) and reupload without the formal co
 - Switching into Vehicles -
 	If this is off then the tab button will not let you enter vehicles however you will still be able to enter an vehicle trough the GUI menu or by walking up to an vehicle an pressing E.
 	
-- Show chat window -
+- Hide chat window -
 	As the name indicates this gives you the option to hide the chat window from showing when another player write an message etc
 	Note: This setting is only shown in multiplayer
 	
-- Show player names -
+- Hide player names -
 	As the name indicates this gives you the option to hide player names from showing above the character head.
 	Note: This setting is only shown in multiplayer
 	
@@ -49,7 +49,7 @@ Xentro - Script
 Ideas From
 Kirovec 		- Mouse controlled cruise control
 dj				- Toggle crosshair
-Ziuta			- Show chat window, Show player names
+Ziuta			- Hide chat window, Hide player names
 Knut A.			- Screenshot mode 						- Not Implanted
 
 Translation

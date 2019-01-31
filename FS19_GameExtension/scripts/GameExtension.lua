@@ -108,6 +108,10 @@ function GameExtension:update(dt)
 	self.firstTimeRun = true;
 end;
 
+function GameExtension:draw()
+	self:callFunction("draw");
+end;
+
 function GameExtension:registerActionEvents()
 	for name, v in pairs(g_gameExtension.actionEventInfo) do
 		local eventAdded, eventId = g_inputBinding:registerActionEvent(name, g_gameExtension, v.callback, v.triggerUp, v.triggerDown, v.triggerAlways, v.startActive, v.callbackState);

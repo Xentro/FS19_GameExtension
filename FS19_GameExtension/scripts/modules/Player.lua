@@ -14,8 +14,8 @@ settings = g_gameExtension:addSetting(settings, { name  = "P_STRENGTH", 		page =
 settings = g_gameExtension:addSetting(settings, { name  = "P_DISTANCE", 		page = "Server", value = 2, 	b = GameExtension.BL_STATE_NORMAL, f = "setPlayerDistance", optionsText = {g_i18n:getText("setting_off"), "3m", "5m", "7m", "10m"} });
 settings = g_gameExtension:addSetting(settings, { name  = "P_CROSSHAIR", 		page = "Client", value = true,	b = GameExtension.BL_STATE_NORMAL, f = "updateCrosshair" });
 -- settings = g_gameExtension:addSetting(settings, { name  = "P_CHAINSAW", 		page = "Server", value = false,	b = GameExtension.BL_STATE_NORMAL, f = "setChainsawUsage" });
-settings = g_gameExtension:addSetting(settings, { name  = "P_SHOW_CHAT", 		page = "Client", value = true,	b = GameExtension.BL_STATE_NORMAL, f = "setShowChatWindow" });
-settings = g_gameExtension:addSetting(settings, { name  = "P_SHOW_PLAYER_NAMES",page = "Client", value = true,	b = GameExtension.BL_STATE_NORMAL, });
+settings = g_gameExtension:addSetting(settings, { name  = "P_HIDE_CHAT", 		page = "Client", value = false,	b = GameExtension.BL_STATE_NORMAL, f = "setHideChatWindow" });
+settings = g_gameExtension:addSetting(settings, { name  = "P_HIDE_PLAYER_NAMES",page = "Client", value = false,	b = GameExtension.BL_STATE_NORMAL, });
 
 g_gameExtension:addModule("PLAYER", M_Player, settings, false);
 
@@ -37,33 +37,45 @@ function M_Player:loadMap()
 	
 	-- We only want these to show in MP, do save the value in SP anyway as its an client setting only
 	if not g_currentMission.missionDynamicInfo.isMultiplayer then
-		self:addBlackListItem("P_SHOW_CHAT", GameExtension.BL_STATE_DONT_SHOW);
-		self:addBlackListItem("P_SHOW_PLAYER_NAMES", GameExtension.BL_STATE_DONT_SHOW);
+		self:addBlackListItem("P_HIDE_CHAT", GameExtension.BL_STATE_DONT_SHOW);
+		self:addBlackListItem("P_HIDE_PLAYER_NAMES", GameExtension.BL_STATE_DONT_SHOW);
 	end;
 end;
 
 function M_Player:update(dt)
 	if not self.firstTimeRun then
-		-- We do it here since we couldn't find it by doing this in loadMap
-		for _, v in pairs(g_inputBinding.events) do
-			if v.actionName == "CHAT" then
-				self.chatEventId = v.id;
-				g_inputBinding:setActionEventActive(self.chatEventId, self:getSetting("PLAYER", "P_SHOW_CHAT")); -- Update according to setting.
-				break;
-			end;
-		end;
-		
-		addMessage("lastChatMessageTime", g_currentMission);
-		addMessage("time", g_currentMission);
-		addMessage("hideTime", g_currentMission.hud.chatWindow);
-		
 		-- addMessage("isMenuVisible:", g_currentMission.hud, "isMenuVisible");
 		-- addMessage("isVisible:", g_currentMission.hud, "isVisible");
+		
+		-- addMessage("lastChatMessageTime", g_currentMission);
+		-- addMessage("time", g_currentMission);
+		-- addMessage("hideTime", g_currentMission.hud.chatWindow);
+		-- addMessage("printMyTest", self);
+		
+		-- self.printMyTest = 7500;
+	else
+		-- if g_currentMission.time > self.printMyTest then
+			-- self.printMyTest = g_currentMission.time + 7500;
+			-- g_currentMission:addChatMessage("Overlord", "The time is " .. math.floor(self.printMyTest));
+			-- log("DEBUG", "Adding message " .. math.floor(self.printMyTest));
+		-- end;
 	end;
 end;
 
 function M_Player:updateTick(dt)
 	if g_currentMission:getIsClient() then
+		-- This will loop a few times for joining clients, how do we make this better?
+		if self.chatEventId == nil and not g_currentMission.isSynchronizingWithPlayers then
+			-- We do it here since we couldn't find it by doing this in loadMap
+			for _, v in pairs(g_inputBinding.events) do
+				if v.actionName == "CHAT" then
+					self.chatEventId = v.id;
+					g_inputBinding:setActionEventActive(self.chatEventId, not self:getSetting("PLAYER", "P_HIDE_CHAT")); -- Update according to setting.
+					break;
+				end;
+			end;
+		end;
+		
 		if g_currentMission.controlPlayer then
 			local player = g_currentMission.player;
 			
@@ -81,7 +93,6 @@ function M_Player:updateTick(dt)
 		end;
 	end;
 end;
-
 
 
 -- Player Lift Strength --
@@ -109,13 +120,11 @@ end;
 -- g_gameExtension:addClassOverride("OVERRIDE_OBJECT_LIFTING", "pickUpObject", Player, M_Player.pickUpObject);
 
 
-
 -- Player Grab Distance --
 
 function M_Player:setPlayerDistance(rowIdx)
 	Player.MAX_PICKABLE_OBJECT_DISTANCE = self.playerStuff.distance.options[rowIdx];
 end;
-
 
 
 -- Crosshair --
@@ -133,7 +142,6 @@ function M_Player:updateCrosshair(state)
 		self.crosshairWasActivated = nil; -- Is set in Screenshot.lua
 	end;
 end;
-
 
 
 -- Chainsaw Restriction --
@@ -164,37 +172,31 @@ end;
 -- g_gameExtension:addClassOverride("OVERRIDE_INPUT_CYCLEHANDTOOL", "onInputCycleHandTool", Player, M_Player.onInputCycleHandTool);
 
 
+-- Hide Chat --
 
--- Chat Restriction --
-
-function M_Player:setShowChatWindow(state)
-	g_currentMission.hud.chatWindow.hideTime = -1;
-	g_currentMission.lastChatMessageTime = 0;
+function M_Player:setHideChatWindow(state)
+	if state then
+		g_currentMission.hud.chatWindow.hideTime = 1; -- Let it close it self, hench why we set it to 1
+	end;
 	
 	if self.chatEventId ~= nil then
-		g_inputBinding:setActionEventActive(self.chatEventId, state);
+		g_inputBinding:setActionEventActive(self.chatEventId, not state);
 	end;
 end;
 
-function M_Player.setLastChatMessageTime(self, oldFunc, ...)
-	-- if g_currentMission:getIsClient() then
-		if g_gameExtension:getSetting("PLAYER", "P_SHOW_CHAT") then
-			oldFunc(self, ...);
-		else
-			g_currentMission.hud.chatWindow.hideTime = -1;	-- This hide the messages
-			g_currentMission.lastChatMessageTime = 0;		-- What this does is the question.. its updated when chatDialog is open
-		end;
-	-- end;
-end;
-g_gameExtension:addClassOverride("OVERRIDE_SHOW_CHAT", "setLastChatMessageTime", Mission00, M_Player.setLastChatMessageTime);
-
-
-
--- Restrict render of player names --
-
-function M_Player.drawUIInfo(self, oldFunc, ...)
-	if g_gameExtension:getSetting("PLAYER", "P_SHOW_PLAYER_NAMES") then
+function M_Player.setVisibleUpdate(self, oldFunc, ...)
+	if not g_gameExtension:getSetting("PLAYER", "P_HIDE_CHAT") then
 		oldFunc(self, ...);
 	end;
 end;
-g_gameExtension:addClassOverride("OVERRIDE_SHOW_PLAYERNAME", "drawUIInfo", Player, M_Player.drawUIInfo);
+g_gameExtension:addClassOverride("OVERRIDE_CHAT_VISIBILITY", "setVisible", ChatWindow, M_Player.setVisibleUpdate);
+
+
+-- Hide Player Names --
+
+function M_Player.drawUIInfo(self, oldFunc, ...)
+	if not g_gameExtension:getSetting("PLAYER", "P_HIDE_PLAYER_NAMES") then
+		oldFunc(self, ...);
+	end;
+end;
+g_gameExtension:addClassOverride("OVERRIDE_PLAYERNAME", "drawUIInfo", Player, M_Player.drawUIInfo);
