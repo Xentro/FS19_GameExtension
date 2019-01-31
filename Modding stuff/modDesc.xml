@@ -6,9 +6,7 @@
 		<en>Game Extension Test setting</en>
 	</title>
 	<description>
-		<en>
-			<![CDATA[Test Settings for Game Extension]]>
-		</en>
+		<en><![CDATA[Test Settings for Game Extension]]></en>
 	</description>
 
 	<iconFilename>store.dds</iconFilename>
@@ -18,5 +16,6 @@
 	
     <extraSourceFiles>
         <sourceFile filename="GE_Test_Option_1.lua"/>
+        <sourceFile filename="GE_Test_Option_2.lua"/>
     </extraSourceFiles>
 </modDesc>

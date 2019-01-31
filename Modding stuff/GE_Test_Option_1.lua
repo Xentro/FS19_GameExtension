@@ -104,9 +104,6 @@ function GE_Test_Option_1:update(dt)
 		end;
 	
 		self.firstRun = true;
-	else
-		if g_gameExtensionGUI ~= nil then
-		end;
 	end;
 end;
 

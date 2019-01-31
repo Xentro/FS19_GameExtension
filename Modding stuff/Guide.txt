@@ -11,9 +11,10 @@ ___ Overrides ___
 		g_gameExtension.OVERRIDE_VEHICLE_FILLLEVEL = true;
 	end;
 	
-	-- List of overrides --
-		OVERRIDE_SAVE_GAME
-		
+	-- List of overrides --		
+		Name						- Overridden function
+		OVERRIDE_SAVE_GAME			- SavegameController.onSaveComplete
+		OVERRIDE_SHOW_PLAYERNAME	- Player.drawUIInfo
 
 ___ Disable Module ___
 	
@@ -42,7 +43,7 @@ ___ Disable Setting ___
 	end;
 
 	
-___ Add Custom Setting ___ TODO
+___ Add Custom Setting ___
 	
 	If you just want to make use of the GUI to be able to change your setting then this is the one you should be reading and change to your need.
 		GE_Test_Option_1.lua
