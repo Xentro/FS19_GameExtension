@@ -1,9 +1,10 @@
 --
 -- M_Player
 --
+-- Player Module, Player specific features are added in this module
+-- 
 -- @author:    	Xentro (Marcus@Xentro.se)
 -- @website:	www.Xentro.se
--- @history:	v1.0 - 2016-11-19 - Initial implementation
 -- 
 
 M_Player = {};

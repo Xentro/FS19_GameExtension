@@ -1,9 +1,10 @@
 --
 -- GameExtensionSpecialization
 --
+-- Main vehicle specialization which controls our module specializations
+--
 -- @author:    	Xentro (Marcus@Xentro.se)
 -- @website:	www.Xentro.se
--- @history:	
 
 
 GameExtensionSpecialization = {};
@@ -13,11 +14,10 @@ function GameExtensionSpecialization.prerequisitesPresent(specializations)
 end;
 
 function GameExtensionSpecialization.registerEventListeners(vehicleType)
-	-- How many of these that works is questionable but its an start list
 	local functionNames = {
 		-- "onRegisterActionEvents",
 		
-		"onPreLoad",
+		-- "onPreLoad",
 		-- "onLoad",
 		-- "onPostLoad",
 		-- "onLoadFinished",
@@ -51,6 +51,10 @@ function GameExtensionSpecialization.registerEventListeners(vehicleType)
 	g_gameExtension:callSpecializationFunction(nil, "registerEventListeners", vehicleType);
 end;
 
-function GameExtensionSpecialization:onPreLoad(savegame)
-	self.gameExtension = {};
+function GameExtensionSpecialization.registerFunctions(vehicleType)
+	g_gameExtension:callSpecializationFunction(nil, "registerFunctions", vehicleType);
+end;
+
+function GameExtensionSpecialization.registerOverwrittenFunctions(vehicleType)
+	g_gameExtension:callSpecializationFunction(nil, "registerOverwrittenFunctions", vehicleType);
 end;

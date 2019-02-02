@@ -1,9 +1,10 @@
 --
 -- GameExtension
---
+-- 
+-- Main class 
+-- 
 -- @author:    	Xentro (Marcus@Xentro.se)
 -- @website:	www.Xentro.se
--- @history:	
 -- 
 
 GameExtension = {};
@@ -37,13 +38,20 @@ function GameExtension:loadMap()
 		hud	   = Utils.getFilename("hudElements.dds", 			folderPaths.huds) -- Used in Farmers Touch and Vehicle module
 	};
 	
-	self.actionEventInfo = {
-		TOGGLE_GUI_SCREEN = {eventId = "", callback = GameExtension.actionCallback, triggerUp = false, triggerDown = true, triggerAlways = false, startActive = true, callbackState = nil, text = g_i18n:getText("TOGGLE_GUI_SCREEN"), textVisibility = false}
-	};
-	
-	getfenv(0)["g_gameExtensionGUI"] = GameExtensionGUI:new();
 	g_gui:loadProfiles(folderPaths.gui .. "guiProfiles.xml");
-	g_gui:loadGui(folderPaths.gui .. "GameExtension.xml", "gameExtensionGUI", g_gameExtensionGUI);
+	
+	if GameExtensionMenu ~= nil then
+		self.actionEventInfo = {};
+		GameExtensionMenu.loadMenu(self);
+	else
+		getfenv(0)["g_gameExtensionGUI"] = GameExtensionGUI:new();
+		
+		self.actionEventInfo = {
+			TOGGLE_GUI_SCREEN = {eventId = "", caller = g_gameExtensionGUI, callback = GameExtension.actionCallback, triggerUp = false, triggerDown = true, triggerAlways = false, startActive = true, callbackState = nil, text = g_i18n:getText("TOGGLE_GUI_SCREEN"), textVisibility = false}
+		};
+		
+		g_gui:loadGui(folderPaths.gui .. "GameExtension.xml", "gameExtensionGUI", g_gameExtensionGUI);
+	end;
 	
 	self:callFunction("loadMap");
 	
@@ -70,12 +78,17 @@ end;
 
 function GameExtension:update(dt)
 	if self.firstTimeRun then
-		if not g_gameExtensionGUI.isLoaded then
-			g_gameExtensionGUI:loadSettings();
+		if g_gameExtensionGUI ~= nil then
+			if not g_gameExtensionGUI.isLoaded then
+				g_gameExtensionGUI:loadSettings();
+			end;
+		end;
+		
+		if g_gameExtensionMenu ~= nil and not g_gameExtensionMenu.isLoaded then
+			g_gameExtensionMenu:finishLoading();
 		end;
 		
 		self:renderVisualDebugMessages();
-		
 	else
 		for name, v in pairs(GameExtension.classOverrides) do
 			if not GameExtension[name] then
@@ -114,13 +127,16 @@ end;
 
 function GameExtension:registerActionEvents()
 	for name, v in pairs(g_gameExtension.actionEventInfo) do
-		local eventAdded, eventId = g_inputBinding:registerActionEvent(name, g_gameExtension, v.callback, v.triggerUp, v.triggerDown, v.triggerAlways, v.startActive, v.callbackState);
+		local eventAdded, eventId = g_inputBinding:registerActionEvent(name, v.caller, v.callback, v.triggerUp, v.triggerDown, v.triggerAlways, v.startActive, v.callbackState);
 		
 		v.eventId = eventId;
 		
 		if v.text ~= nil and v.text ~= "" then
 			g_inputBinding:setActionEventText(eventId, v.text);
-			g_inputBinding:setActionEventTextVisibility(eventId, g_gameExtension:getSetting("MISC", "SHOW_HELP_BUTTON"));
+	
+			if M_Misc ~= nil then
+				M_Misc.setShowHelpButton(g_gameExtension, nil, eventId);
+			end;
 		end;
 		
 		if not eventAdded then
@@ -147,9 +163,16 @@ if g_gameExtension == nil then
 	source(Utils.getFilename("UtilsSettings.lua", 	   	folderPaths.utils));
 	source(Utils.getFilename("SettingEvent.lua", 	  	folderPaths.events));
 	source(Utils.getFilename("SynchSettingsEvent.lua", 	folderPaths.events));
-	source(Utils.getFilename("gui.lua", 				folderPaths.gui));
-	source(Utils.getFilename("elements.lua", 			folderPaths.gui));
-
+	
+	-- Rebuilding menu
+	-- local file = Utils.getFilename("GameExtensionMenu.lua", 	folderPaths.gui);
+	if fileExists(file) then
+		source(file);
+	else
+		source(Utils.getFilename("gui.lua", 				folderPaths.gui));
+		source(Utils.getFilename("elements.lua", 			folderPaths.gui));
+	end;
+	
 	g_gameExtension:loadModDescData();
 	source(Utils.getFilename("AddSpecialization.lua", 	folderPaths.scripts)); -- Add the GameExtension Specialization
 	
@@ -160,13 +183,3 @@ else
 	log("ERROR", "There are multiply versions of this mod! This mod ( " .. GameExtension.modName .. " ) will now be disabled.");
 	GameExtension = nil;
 end;
-
-
-function testtest(self, oldFunc, name, ...)
-	local eventAdded, eventId = oldFunc(self, name, ...);
-	
-	print("-- registerActionEvent: " .. name .. " - eventId: " .. tostring(eventId));
-	
-	return eventAdded, eventId;
-end;
--- InputBinding.registerActionEvent = Utils.overwrittenFunction(InputBinding.registerActionEvent, testtest);

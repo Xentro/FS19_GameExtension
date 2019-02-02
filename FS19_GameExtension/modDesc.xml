@@ -9,7 +9,7 @@
 		<!-- TODO, Include translations -->
 	</description>
 
-	<iconFilename>store.dds</iconFilename>
+	<iconFilename>store.png</iconFilename>
 	<multiplayer supported="true" />
 	
 	<l10n filenamePrefix="translations/modDesc" />
@@ -57,13 +57,13 @@
 	
 	<!--
 	l10nNameTag			- Optional 					- Make text global so we can use it on the mod. Name it like following in modDesc GAME_EXTENSION_01, GAME_EXTENSION_02... 
-	debug							- True / False	- Log the work flow 
+	debug				- Optional	- True / False	- Log the work flow 
 	
 	The following tags can be used multiply times
 	
 	vehicleTypeLimit	- Optional 	- True / False 	- Limit to what vehicle type to add specialization into, True = Add to this type, False = Don't add to this type. Remove tag if not used.
-	restrictions					- 0 / 1 		- Specialization which we must/can't have.
-	searchWords						- 0 / 1			- This will search for an match for this word in the specialization name
+	restrictions		- Optional	- 0 / 1 		- Specialization which we must/can't have.
+	searchWords			- Optional	- 0 / 1			- This will search for an match for this word in the specialization name
 	
 	0 = Required specialization, all of these must be found to pass
 	1 = Unallowed specialization, fail if any of these are found
@@ -71,7 +71,10 @@
 	-->
 	
 	<addSpecialization>
-		<specialization name="GameExtension" className="GameExtensionSpecialization" filename="scripts/GameExtensionSpecialization.lua" l10nNameTag="GAME_EXTENSION" debug="false">
+		<specialization name="gameExtension" className="GameExtensionSpecialization" filename="scripts/GameExtensionSpecialization.lua" debug="false">
+			<vehicleTypeLimit state="false" name="horse" />
+			<vehicleTypeLimit state="false" name="locomotive" />
+			
 			<!-- Cruise Control -->
 			<restrictions state="2" name="drivable" />
 			<!-- Vehicle Hud -->

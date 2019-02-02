@@ -1,20 +1,13 @@
 --
 -- M_Misc
 --
+-- Misc Module, Small features which don't need its own module 
+-- 
 -- @author:    	Xentro (Marcus@Xentro.se)
 -- @website:	www.Xentro.se
--- @history:	
 -- 
 	
 M_Misc = {};
-
--- BL_STATE_NORMAL 		= 0;
--- BL_STATE_DONT_SHOW 	= 1; -- Don't show in gui, will save
--- BL_STATE_NOTHING 	= 2; -- Won't show or save setting
-
--- Module, Name, GUI Page, value
--- f = function, b = blacklist, e = event
-
 
 local settings = {};
 settings = g_gameExtension:addSetting(settings, { name = "SHOW_HELP_BUTTON", 		page = "Client", value = true, b = g_gameExtension.BL_STATE_NORMAL, f = "setShowHelpButton" });
@@ -48,17 +41,29 @@ function M_Misc:deleteMap()
 end;
 
 
-function M_Misc:setShowHelpButton(state)
-	for name, v in pairs(self.actionEventInfo) do
-		if v.text ~= nil and v.text ~= "" then
-			g_inputBinding:setActionEventTextVisibility(v.eventId, state);
+-- Show "Open GUI menu" in help window
+
+function M_Misc:setShowHelpButton(state, eventId)
+	if eventId ~= nil then -- Called trough GameExtension.lua
+		g_inputBinding:setActionEventTextVisibility(eventId, g_gameExtension:getSetting("MISC", "SHOW_HELP_BUTTON"));
+	else
+		for name, v in pairs(self.actionEventInfo) do
+			if v.text ~= nil and v.text ~= "" then
+				g_inputBinding:setActionEventTextVisibility(v.eventId, state);
+			end;
 		end;
 	end;
 end;
 
+
+-- Vehicle Tabbing
+
 function M_Misc:setTabState(state)
 	g_currentMission.isToggleVehicleAllowed = state;
 end;
+
+
+-- Cruise Control
 
 function M_Misc:changeCruiseControlState(state)
 	if g_currentMission.controlledVehicle ~= nil then

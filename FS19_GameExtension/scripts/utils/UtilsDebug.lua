@@ -1,9 +1,10 @@
 --
 -- UtilsDebug
 --
+-- Logging information to file or render on screen
+-- 
 -- @author:    	Xentro (Marcus@Xentro.se)
 -- @website:	www.Xentro.se
--- @history:	
 -- 
 
 GameExtension.ERROR 		= 0;

@@ -1,3 +1,12 @@
+--
+-- SetSettingEvent
+--
+-- Sends an event when an setting have changed its value
+-- 
+-- @author:    	Xentro (Marcus@Xentro.se)
+-- @website:	www.Xentro.se
+-- 
+
 SetSettingEvent = {};
 SetSettingEvent_mt = Class(SetSettingEvent, Event);
 

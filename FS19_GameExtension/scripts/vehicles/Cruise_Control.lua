@@ -1,9 +1,10 @@
 --
 -- Cruise_Control
 --
+-- Adds mouse controlled cruise control to vehicles 
+--
 -- @author:    	Xentro (Marcus@Xentro.se)
 -- @website:	www.Xentro.se
--- @history:	v1.0 - 2016-10-29 - Initial implementation
 -- 
 
 Cruise_Control = {
@@ -21,17 +22,18 @@ function Cruise_Control:registerEventListeners(vehicleType)
 	end;
 end;
 
+function Cruise_Control:registerFunctions(vehicleType)
+	SpecializationUtil.registerFunction(vehicleType, "updateCruiseActionEvents", Cruise_Control.updateCruiseActionEvents);
+end;
+
 function Cruise_Control:onLoad(savegame, xmlFile)
-	self.updateCruiseActionEvents = Cruise_Control.updateCruiseActionEvents;
-	
-	self.gameExtension.cruiseControl = {};
-	self.gameExtension.cruiseControl.actions = {};
-	self.gameExtension.cruiseControl.actionEvents = {};
+	self.spec_gameExtension.cruiseControl = {};
+	self.spec_gameExtension.cruiseControl.actionEvents = {};
 end;
 
 function Cruise_Control:onRegisterActionEvents(isActiveForInput, isActiveForInputIgnoreSelection)
 	if self.isClient then
-		local spec = self.gameExtension.cruiseControl;
+		local spec = self.spec_gameExtension.cruiseControl;
 		
 		self:clearActionEventsTable(spec.actionEvents);
 		
@@ -47,7 +49,7 @@ end;
 
 function Cruise_Control:updateCruiseActionEvents(isActive)
 	for _, inputAction in ipairs({InputAction.X_CRUISE_ACTIVATE, InputAction.X_CRUISE_DOWN, InputAction.X_CRUISE_UP}) do
-		local action = self.gameExtension.cruiseControl.actionEvents[inputAction];
+		local action = self.spec_gameExtension.cruiseControl.actionEvents[inputAction];
 		
 		if action ~= nil then
 			g_inputBinding:setActionEventTextVisibility(action.actionEventId, false);

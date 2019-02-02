@@ -1,9 +1,10 @@
 --
 -- UtilsSettings
+-- 
+-- Module and settings information are handled here
 --
 -- @author:    	Xentro (Marcus@Xentro.se)
 -- @website:	www.Xentro.se
--- @history:	
 -- 
 
 GameExtension.modules 			= {};

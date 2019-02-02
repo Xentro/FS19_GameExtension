@@ -1,11 +1,11 @@
 --
 -- SynchSettingsEvent
 --
+-- Collect all our settings and synchronize them with clients upon joining server
+-- 
 -- @author:    	Xentro (Marcus@Xentro.se)
 -- @website:	www.Xentro.se
--- @history:	v1.0 - 2016-11-04 - Initial implementation
 -- 
-
 
 SynchSettingsEvent = {};
 SynchObjectListEvent_mt = Class(SynchSettingsEvent, Event);

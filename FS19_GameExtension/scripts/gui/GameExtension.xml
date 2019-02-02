@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <GUI onOpen="onOpen" onClose="onClose">
 	<!-- File dont seem to load - <GuiElement type="bitmap" profile="backgroundImageIngame" /> - uiElementBg -->
-	<GuiElement type="bitmap" profile="pageBackground" />
+	<GuiElement type="bitmap" profile="uiFullInGameBackground" />
 	
 	<GuiElement type="bitmap" profile="uiInGameMenuHeader">
 		<GuiElement type="multiTextOption" profile="uiInGameMenuHeaderSelector" onCreate="onCreatePageSelection" onClick="onClickUpdatePageSelection">

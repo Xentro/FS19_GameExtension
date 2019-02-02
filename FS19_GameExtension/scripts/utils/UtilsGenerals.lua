@@ -1,9 +1,10 @@
 --
 -- UtilsGenerals
 --
+-- Misc functions 
+-- 
 -- @author:    	Xentro (Marcus@Xentro.se)
 -- @website:	www.Xentro.se
--- @history:	
 -- 
 
 GameExtension.colorCodes = {

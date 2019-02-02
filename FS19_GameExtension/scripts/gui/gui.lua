@@ -1,9 +1,10 @@
 --
 -- GameExtensionGUI
---
+-- 
+-- Main GUI 
+-- 
 -- @author:    	Xentro (Marcus@Xentro.se)
 -- @website:	www.Xentro.se
--- @history		v1.0 - 2016-11-10 - Initial implementation
 -- 
 
 GameExtensionGUI = {};
@@ -50,6 +51,8 @@ function GameExtensionGUI:new(target, custom_mt)
 	
 	self.isAdminPage 		= {};
 	self.redirectToLogin 	= nil;
+	
+	self.performBackgroundBlur = true;
 	
 	return self;
 end;
@@ -134,6 +137,7 @@ function GameExtensionGUI:onOpen()
 	
 	-- Make sure the correct page is showing
 	self:updatePageSelection();
+	g_depthOfFieldManager:setBlurState(true);
 end;
 
 function GameExtensionGUI:onClose()
@@ -141,6 +145,7 @@ function GameExtensionGUI:onClose()
 	g_inputBinding:setShowMouseCursor(false);
 	
 	self.isOpen = false;
+	g_depthOfFieldManager:setBlurState(false);
 end;
 
 
