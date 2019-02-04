@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+	<texts>
+		<!-- GE_Test_Option_1 -->
+		<text name="pageTemplate" 						text="Page %i - Custom Page" />
+		<text name="settingTemplate" 					text="Setting %i" />
+		<text name="toolTip_settingTemplate" 			text="This is the tool tip, Setting is option %i" />
+		<text name="optionTemplate" 					text="Option %i" />
+		
+		<text name="settingNameOfOptionFourth" 			text="Setting 4" />
+		<text name="toolTip_settingNameOfOptionFourth" 	text="This is the tool tip, Setting is option 4" />
+		<text name="settingNameOfOptionFifth" 			text="Setting 5" />
+		<text name="toolTip_settingNameOfOptionFifth" 	text="This is the tool tip, Setting is option 5" />
+	</texts>
+</l10n>

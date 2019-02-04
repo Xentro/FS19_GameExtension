@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="42">
+    <author>Xentro</author>
+    <version>0.0.0.0</version>
+	<title>
+		<en>Game Extension Test setting</en>
+	</title>
+	<description>
+		<en><![CDATA[Test Settings for Game Extension]]></en>
+	</description>
+
+	<iconFilename>store.dds</iconFilename>
+	<multiplayer supported="true" />
+	
+	<l10n filenamePrefix="modDesc" />
+	
+    <extraSourceFiles>
+        <sourceFile filename="GE_Test_Option_1.lua"/>
+        <sourceFile filename="GE_Test_Option_2.lua"/>
+    </extraSourceFiles>
+</modDesc>

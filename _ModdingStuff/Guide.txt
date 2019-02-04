@@ -1,0 +1,52 @@
+___ Overrides ___
+
+	Give the option of stopping overrides which Game Extension does.
+	Preferable set this in loadMap() function, any later will render it useless.
+	
+	Note:
+	Keep in mind by stopping an override it is adviced to disable the setting which is linked to it, read the next chapter (Disable Setting).
+	
+	-- Code Example --
+	if g_gameExtension ~= nil then
+		g_gameExtension.OVERRIDE_VEHICLE_FILLLEVEL = true;
+	end;
+	
+	-- List of overrides --		
+		Name						- Overridden function
+		OVERRIDE_SAVE_GAME			- SavegameController.onSaveComplete
+		OVERRIDE_SHOW_PLAYERNAME	- Player.drawUIInfo
+
+___ Disable Module ___
+	
+	This will stop everything which is linked to this module such as setting or objects from being called, shown or saved.
+	Call in load function, all mods are loaded by then and its safe to deactivate modules.
+
+	-- Code Example --
+	if g_gameExtension ~= nil then
+		g_gameExtension:deactivateModule("PLAYER", g_currentModName); 
+	end;
+
+
+___ Disable Setting ___
+	
+	Give the option to change the state of an setting or module which change how they will function in the game
+	
+	g_gameExtension.BL_STATE_NORMAL 	 	= 0; -- Normal
+	g_gameExtension.BL_STATE_DONT_SHOW   	= 1; -- Don't show in gui, will save
+	g_gameExtension.BL_STATE_NOTHING 		= 2; -- Won't show or save setting, Default
+	
+	g_gameExtension:disableSettingForMod(MOD, SETTING or MODULE NAME, BLACKLIST STATE (Optional))
+	
+	-- Code Example --
+	if g_gameExtension ~= nil then
+		g_gameExtension:disableSettingForMod("ZZZ_driveControl", "DC_USE_SHUTTLE", g_gameExtension.BL_STATE_DONT_SHOW);
+	end;
+
+	
+___ Add Custom Setting ___
+	
+	If you just want to make use of the GUI to be able to change your setting then this is the one you should be reading and change to your need.
+		GE_Test_Option_1.lua
+	
+	To use all the features of game extension such as saving and MP synchronizing then you should take an look on this file
+		GE_Test_Option_2.lua
