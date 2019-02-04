@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+	<texts>
+		<!-- with $l10n_modTitle we can access these trough modDesc but its not working very well due to minor bugs in base code -->
+		<text name="modTitle" 						text="Game Extension" />
+		<text name="modDescription" 				text="Улучшите игру с помощью новых функций и меню, где вы сможете изменить работу этих функций." />
+		
+	<!-- GUI -->
+		<text name="input_TOGGLE_GUI_SCREEN" 		text="Game Extension: Меню" />
+		<text name="TOGGLE_GUI_SCREEN" 				text="Открытие меню Game Extension" />
+		<text name="CLIENT_SETTING_PAGE" 			text="Настройки клиента" /><!-- %i for page number -->
+		<text name="SERVER_SETTING_PAGE" 			text="Настройки сервера" /><!-- %i for page number -->
+		
+		<text name="PAGE_HELP" 						text="Помощь" />
+		<text name="PAGE_SETTING"	 				text="Настройки" />
+		<text name="PAGE_LOGIN" 					text="Вам необходимо войти, чтобы получить доступ к этой странице!
+		
+Войдите в систему как администратор сервера через меню управления фермой." />
+
+	<!-- Modules -->
+		<!-- Misc -->
+		<text name="SHOW_HELP_BUTTON" 				text="Отображать кнопку в меню помощи" />
+		<text name="toolTip_SHOW_HELP_BUTTON" 		text="Должна ли кнопка 'открывать меню' отображаться в окне справки." />
+		<text name="VEHICLE_TABBING" 				text="Переключение по технике" />
+		<text name="toolTip_VEHICLE_TABBING" 		text="Разрешить переключение клавишей TAB между транспортными средствами (тракторами, автомобилями, грузовиками и т.д.)" />
+		
+		<!-- Player -->
+		<text name="P_STRENGTH" 					text="Сила подъема" />
+		<text name="P_STRENGTH_SET_UNLIMITED"		text="Безграничная" />
+		<text name="toolTip_P_STRENGTH" 			text="Максимальный вес поднимаемого объекта." />
+		<text name="P_DISTANCE" 					text="Расстояние захвата" />
+		<text name="toolTip_P_DISTANCE" 			text="На каком максимальном расстоянии игрок сможет захватить объект." />
+		<text name="P_CROSSHAIR" 					text="Точка по центру" />
+		<text name="toolTip_P_CROSSHAIR" 			text="Отключение точки по центру экрана" />
+		<text name="P_HIDE_CHAT" 					text="Скрывать окно чата" />
+		<text name="toolTip_P_HIDE_CHAT" 			text="Должно ли окно чата появляться, когда игрок написал сообщение." />
+		<text name="P_HIDE_PLAYER_NAMES" 			text="Скрывать имена игроков" />
+		<text name="toolTip_P_HIDE_PLAYER_NAMES" 	text="Должно ли имя игрока отображаться над головой персонажа." />
+		
+		<!-- Vehicle -->
+		<text name="V_HUD_ACTIVE" 					text="Иконки транспортных средств" />
+		<text name="toolTip_V_HUD_ACTIVE" 			text="Визуальные значки помощи для транспортных средств." />
+		
+		<!-- Cruise Control -->
+		<text name="input_X_CRUISE_ACTIVATE" 		text="Game Extension: Переключение круиз-контроля" />
+		<text name="input_X_CRUISE_DOWN" 			text="Game Extension: Уменьшить скорость круиз-контроля" />
+		<text name="input_X_CRUISE_UP" 				text="Game Extension: Увеличить скорость круиз-контроля" />
+		<text name="CRUISE_ACTIVE" 					text="Круиз-контроль" />
+		<text name="toolTip_CRUISE_ACTIVE" 			text="Управление круиз-контролем мышью." />
+		<text name="CRUISE_SCROOL_SPEED" 			text="Скорость управления круиз-контролем" />
+		<text name="toolTip_CRUISE_SCROOL_SPEED" 	text="Степень изменения уровня круиз-контроля." />
+	</texts>
+</l10n>
