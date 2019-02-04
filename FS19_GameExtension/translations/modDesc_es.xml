@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+	<texts>
+		<!-- with $l10n_modTitle we can access these trough modDesc but its not working very well due to minor bugs in base code -->
+		<text name="modTitle" 						text="Game Extension" />
+		<text name="modDescription" 				text="Mejora el juego con nuevas características y un menú de partida donde podrás gestionar estas nuevas características." />
+		
+	<!-- GUI -->
+		<text name="input_TOGGLE_GUI_SCREEN" 		text="Game Extension: Alternar GUI" />
+		<text name="TOGGLE_GUI_SCREEN" 				text="Abrir menú Game Extension" />
+		<text name="CLIENT_SETTING_PAGE" 			text="Ajustes Cliente" /><!-- %i for page number -->
+		<text name="SERVER_SETTING_PAGE" 			text="Ajustes Servidor" /><!-- %i for page number -->
+		
+		<text name="PAGE_HELP" 						text="Página de Ayuda" />
+		<text name="PAGE_SETTING"	 				text="Página de Ajustes" />
+		<text name="PAGE_LOGIN" 					text="Necesita loguearse para acceder a esta página!
+
+Inicie sesión como administrador del servidor a través del menú Administración de la granja." />
+
+	<!-- Modules -->
+		<!-- Misc -->
+		<text name="SHOW_HELP_BUTTON" 				text="Mostrar botón de ayuda" />
+		<text name="toolTip_SHOW_HELP_BUTTON" 		text="Mostrar o no el botón de abrir menú en el panel de ayuda." />
+		<text name="VEHICLE_TABBING" 				text="Cambio en vehículos" />
+		<text name="toolTip_VEHICLE_TABBING" 		text="Permitir cambio entre vehículos (Tractores, coches, camiones etc)." />
+		
+		<!-- Player -->
+		<text name="P_STRENGTH" 					text="Fuerza para levantar objetos" />
+		<text name="P_STRENGTH_SET_UNLIMITED"		text="Ilimitado" />
+		<text name="toolTip_P_STRENGTH" 			text="Capacidad de levantar objetos." />
+		<text name="P_DISTANCE" 					text="Distancia de agarre del jugador" />
+		<text name="toolTip_P_DISTANCE" 			text="Como de lejos puede agarrar un objeto." />
+		<text name="P_CROSSHAIR" 					text="Indicador Central de Pantalla  O" />
+		<text name="toolTip_P_CROSSHAIR" 			text="Fijar la visibilidad del indicador central de pantalla." />
+		<text name="P_HIDE_CHAT" 					text="Ocultar ventana de chat" />
+		<text name="toolTip_P_HIDE_CHAT" 			text="Si la ventana de chat debe aparecer o no cuando un jugador ha escrito un mensaje.." />
+		<text name="P_HIDE_PLAYER_NAMES" 			text="Ocultar nombre de jugadores" />
+		<text name="toolTip_P_HIDE_PLAYER_NAMES" 	text="Si el nombre del jugador debe mostrarse o no sobre la cabeza del personaje." />
+		
+		<!-- Vehicle -->
+		<text name="V_HUD_ACTIVE" 					text="Iconos del Hud del vehículo" />
+		<text name="toolTip_V_HUD_ACTIVE" 			text="Iconos de ayudas visuales para vehículos.." />
+		
+		<!-- Cruise Control -->
+		<text name="input_X_CRUISE_ACTIVATE" 		text="Game Extension: Activar Control Crucero" />
+		<text name="input_X_CRUISE_DOWN" 			text="Game Extension: Ajustar Control Curcero Abajo" />
+		<text name="input_X_CRUISE_UP" 				text="Game Extension: Ajustar Control Curcero Arriba" />
+		<text name="CRUISE_ACTIVE" 					text="Control Crucero" />
+		<text name="toolTip_CRUISE_ACTIVE" 			text="Ratón controla control crucero." />
+		<text name="CRUISE_SCROOL_SPEED" 			text="Velocidad Control Crucero" />
+		<text name="toolTip_CRUISE_SCROOL_SPEED" 	text="Velocidad desplazamiento." />
+	</texts>
+</l10n>
