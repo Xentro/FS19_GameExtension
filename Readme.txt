@@ -1,3 +1,9 @@
+This version of this mod is under development!
+
+The only valid version of this mod can be found here https://github.com/Xentro/FS19_GameExtension
+Any other version aren't approved by me ( Xentro ) in any shape or form, it will find its way to https://www.farming-simulator.com when its ready for it.
+
+
 
 === Show some respect and follow these rules ===
 
@@ -48,14 +54,14 @@ Xentro - Script
 
 Ideas From
 Kirovec 		- Mouse controlled cruise control
-dj				- Toggle crosshair
+dj			- Toggle crosshair
 Ziuta			- Hide chat window, Hide player names
-Knut A.			- Screenshot mode 						- Not Implanted
 
 Translation
-Xentro		- English
-Ziuta		- Polish
-Vanquish081 - Spanish
+Xentro			- English
+Ziuta			- Polish
+Vanquish081		- Spanish
+Gonimy-Vetrom		- Russian
 
 
 === Change Log ===
@@ -78,5 +84,5 @@ other question that are unrelated to "support" then feel free to contact me at
 Website:  Xentro.se
 E-mail:   Marcus@xentro.se
 
-For bugs you can report them here and I will look into them in due time.
+For Suggestions or bugs you can report them here and I will look into them in due time.
 https://github.com/Xentro/FS19_GameExtension/issues
