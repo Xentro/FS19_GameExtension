@@ -199,7 +199,6 @@ function GameExtension:setSetting(moduleName, name, newValue, noEventSend, first
 					else
 						-- Save client settings when they are changed but only once everything is loaded and ready to go.
 						if g_currentMission:getIsClient() and g_dedicatedServerInfo == nil then
-							log("DEBUG", "Attempting to save client settings to xml file.")
 							self:saveFile(self.filenames.client, false);
 						end;
 					end;
@@ -293,7 +292,7 @@ function GameExtension:saveFile(filename, isServer)
 		if not saveXMLFile(xmlFile) then
 			log("ERROR", "Something failed during saving, Can't save settings - xmlFile: " .. xmlFile .. ", File: " .. filename);
 		else
-			log("DEBUG", "Saved Settings - xmlFile ID: " .. xmlFile .. " - File Exists: " .. tostring(fileExists(filename)) .. " - File Path: " .. filename);
+			-- log("DEBUG", "Saved Settings - xmlFile ID: " .. xmlFile .. " - File Exists: " .. tostring(fileExists(filename)) .. " - File Path: " .. filename);
 		end;
 	end;
 	

@@ -26,7 +26,7 @@ function GE_Test_Option_1:update(dt)
 		
 		-- for Float or Int you need to use getOptions() or getOptionsText(), if you use Bool then you can remove that line.
 		
-		if g_gameExtensionGUI ~= nil then
+		if g_gameExtensionMenu ~= nil then
 			local page = {};
 			
 			page.pageName 	 = string.format(g_i18n:getText("pageTemplate"), 1);
@@ -62,11 +62,11 @@ function GE_Test_Option_1:update(dt)
 				-- 2 = min
 				-- 3 = max
 				-- This will give you an range of numbers to toggle between.
-				options = g_gameExtensionGUI:getOptions({4, 1, 5}) -- For Float or Int
+				options = g_gameExtensionMenu:getOptions({4, 1, 5}) -- For Float or Int
 			};
 			
 			-- If page don't exist then it will be created, if it exist then settings will be added to it witout replacing page data.
-			g_gameExtensionGUI:addSettingsToPage("ourRealPageName", page);
+			g_gameExtensionMenu:addSettingsToPage("ourRealPageName", page);
 			
 			
 			-- If we know that the page have been created then we can use this but this is only good for default pages.
@@ -84,18 +84,18 @@ function GE_Test_Option_1:update(dt)
 				isLockedByForce = false, -- Use this to disable setting
 				
 				-- This will give you texted options to toggle between
-				options = g_gameExtensionGUI:getOptionsText({
+				options = g_gameExtensionMenu:getOptionsText({
 					string.format(g_i18n:getText("optionTemplate"), 1),
 					string.format(g_i18n:getText("optionTemplate"), 2),
 					string.format(g_i18n:getText("optionTemplate"), 3)
 				})
 			};
-			g_gameExtensionGUI:addSettingsToPage("ourRealPageName", setting);
+			g_gameExtensionMenu:addSettingsToPage("ourRealPageName", setting);
 			
 			
 			-- You can access the setting above with something like this.
 			--[[ 
-			local setting = g_gameExtensionGUI:getSetting("ourRealPageName", "settingNameOfOptionTwo");
+			local setting = g_gameExtensionMenu:getSetting("ourRealPageName", "settingNameOfOptionTwo");
 			
 			if setting ~= nil then
 				setting.isLockedByForce = true;

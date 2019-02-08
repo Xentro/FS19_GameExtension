@@ -18,6 +18,7 @@ GameExtension.specializations = {};
 -- Paths
 folderPaths = {
 	huds		= GameExtension.modDirectory .. "huds/",
+	menu		= GameExtension.modDirectory .. "menu/",
 	scripts 	= GameExtension.modDirectory .. "scripts/",
 	events 		= GameExtension.modDirectory .. "scripts/events/",
 	gui 		= GameExtension.modDirectory .. "scripts/gui/",
@@ -39,19 +40,8 @@ function GameExtension:loadMap()
 		hud	   = Utils.getFilename("hudElements.dds", 			folderPaths.huds) -- Used in Farmers Touch and Vehicle module
 	};
 	
-	if GameExtensionMenu ~= nil then
-		getfenv(0)["g_gameExtensionMenu"] = GameExtensionMenu:new();
-		g_gameExtensionMenu.loadMenu(self);
-	else
-		getfenv(0)["g_gameExtensionGUI"] = GameExtensionGUI:new();
-		
-		self.actionEventInfo = {
-			TOGGLE_GUI_SCREEN = {eventId = "", caller = g_gameExtensionGUI, callback = GameExtension.actionCallback, triggerUp = false, triggerDown = true, triggerAlways = false, startActive = true, callbackState = nil, text = g_i18n:getText("TOGGLE_GUI_SCREEN"), textVisibility = false}
-		};
-		
-		g_gui:loadProfiles(folderPaths.gui .. "guiProfiles.xml");
-		g_gui:loadGui(folderPaths.gui .. "GameExtension.xml", "gameExtensionGUI", g_gameExtensionGUI);
-	end;
+	getfenv(0)["g_gameExtensionMenu"] = GameExtensionMenu:new(self);
+	g_gameExtensionMenu:loadMenu(self);
 	
 	self:callFunction("loadMap");
 	
@@ -68,9 +58,9 @@ end;
 function GameExtension:deleteMap()
 	self:callFunction("deleteMap");
 	
-	if g_gameExtensionGUI ~= nil then
-		g_gameExtensionGUI:delete();
-		g_gameExtensionGUI = nil;
+	if g_gameExtensionMenu ~= nil then
+		g_gameExtensionMenu:delete();
+		g_gameExtensionMenu = nil;
 	end;
 	
 	g_gameExtension	= nil;
@@ -78,13 +68,7 @@ end;
 
 function GameExtension:update(dt)
 	if self.firstTimeRun then
-		if g_gameExtensionGUI ~= nil then
-			if not g_gameExtensionGUI.isLoaded then
-				g_gameExtensionGUI:loadSettings();
-			end;
-		end;
-		
-		if g_gameExtensionMenu ~= nil and not g_gameExtensionMenu:getIsLoaded() then
+		if not g_gameExtensionMenu:getIsLoaded() then
 			self:sendSettingsToMenu();
 		end;
 		
@@ -145,16 +129,6 @@ function GameExtension:registerActionEvents()
 	end;
 end;
 
--- To be deleted
-function GameExtension:actionCallback(actionName, keyStatus)
-	if actionName == "TOGGLE_GUI_SCREEN" then
-		if g_gameExtensionGUI:canOpen() then
-			g_gui:showGui("gameExtensionGUI");
-		end;
-	end;
-end;
-
-
 -- Only allow one instance of this mod!
 if g_gameExtension == nil then
 	getfenv(0)["g_gameExtension"] = GameExtension;
@@ -165,15 +139,8 @@ if g_gameExtension == nil then
 	source(Utils.getFilename("SettingEvent.lua", 	  	folderPaths.events));
 	source(Utils.getFilename("SynchSettingsEvent.lua", 	folderPaths.events));
 	
-	-- Rebuilding menu
-	local file = Utils.getFilename("GameExtensionMenu.lua", 	folderPaths.gui);
-	if fileExists(file) then
-		source(file);
-		source(Utils.getFilename("GameExtensionMenuUtil.lua", 	folderPaths.gui));
-	else
-		source(Utils.getFilename("gui.lua", 				folderPaths.gui));
-		source(Utils.getFilename("elements.lua", 			folderPaths.gui));
-	end;
+	source(Utils.getFilename("GameExtensionMenu.lua", 		folderPaths.gui));
+	source(Utils.getFilename("GameExtensionMenuUtil.lua", 	folderPaths.gui));
 	
 	g_gameExtension:loadModDescData();
 	source(Utils.getFilename("AddSpecialization.lua", 	folderPaths.scripts)); -- Add the GameExtension Specialization

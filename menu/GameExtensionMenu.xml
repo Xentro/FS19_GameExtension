@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<GUI onOpen="onOpen" onClose="onClose" onCreate="onCreate">
+	<GuiElement type="bitmap" profile="uiFullInGameBackground"/>
+	
+	<!-- Header -->
+	<GuiElement type="bitmap" profile="uiInGameMenuHeader" id="header">
+		<GuiElement type="multiTextOption" profile="uiInGameMenuHeaderSelector" onClick="onClickPageSelection" id="pageSelector" soundDisabled="true">
+			<GuiElement type="button" profile="uiInGameMenuPagingButtonLeft" id="pagingButtonLeft" />
+			<GuiElement type="button" profile="uiInGameMenuPagingButtonRight" id="pagingButtonRight" />
+			<GuiElement type="text" profile="pageSelectionHeaderText" id="pagingHeader" />
+		</GuiElement>
+		
+		<GuiElement type="flowLayout" profile="pageMarkerBox">
+			<GuiElement type="bitmap" profile="pageMarkerState" id="pageMarkerTemplate"/>
+		</GuiElement>
+	</GuiElement>
+	
+	<!-- Body -->
+	<GuiElement type="bitmap" profile="uiElementContainerFullScreenSpanning" size="1920px 1080px">
+		<GuiElement type="empty" profile="uiInGameMenuPaging" id="rootPage">
+			<!-- Setting Page Template -->
+			<GuiElement type="empty" profile="ingameMenuSettingsBox" position="130px -124px" id="pageSettingsTemplate">
+				<GuiElement type="boxLayout" profile="ingameMenuSettingsLayout" position="50px -50px" id="boxLayout">
+					<!-- Using checkedOption mainly for the bool values -->
+					<GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="setSettingElement" onFocus="updateHelpText" id="settingTemplate" toolTipText="This is one epic tool tip!">
+						<GuiElement type="button" profile="multiTextOptionSettingsLeft" />
+						<GuiElement type="button" profile="multiTextOptionSettingsRight"/>
+						<GuiElement type="text"   profile="multiTextOptionSettingsText" />
+						<GuiElement type="text"   profile="multiTextOptionSettingsTitle" text="Temporary"/>
+						<GuiElement type="bitmap" profile="multiTextOptionSettingsBg" />
+					</GuiElement>
+				</GuiElement>
+			</GuiElement>
+
+			<!-- Login Page -->
+			<GuiElement type="empty" profile="ingameMenuSettingsBox" position="130px -124px" id="pageLogin" visible="false">
+				<GuiElement type="text" profile="loginText" text="$l10n_PAGE_LOGIN" />
+			</GuiElement>
+			
+			<!-- ToolTip -->
+			<GuiElement type="bitmap" profile="ingameMenuHelpRowBg" position="210px 64px" id="toolTipBox" visible="false">
+				<GuiElement type="bitmap" profile="ingameMenuHelpRowIcon" />
+				<GuiElement type="text" profile="ingameMenuHelpRowText" id="toolTipBoxText" text=""/>
+			</GuiElement>
+		</GuiElement>
+	</GuiElement>
+	
+	<!-- Footer -->
+	<GuiElement type="flowLayout" profile="buttonBoxDocked" screenAlign="bottomLeft" positionOrigin="bottomLeft" position="130px 77px" id="buttonsPanel">
+		<GuiElement type="button" profile="buttonBack" onClick="onClickBack" id="menuButton[1]" visible="false"/>
+		<GuiElement type="button" profile="buttonBack" onClick="onClickBack" id="menuButton[2]" visible="false"/>
+		<GuiElement type="button" profile="buttonBack" onClick="onClickBack" id="menuButton[3]" visible="false"/>
+		<GuiElement type="button" profile="buttonBack" onClick="onClickBack" id="menuButton[4]" visible="false"/>
+		<GuiElement type="button" profile="buttonBack" onClick="onClickBack" id="menuButton[5]" visible="false"/>
+		<GuiElement type="button" profile="buttonBack" onClick="onClickBack" id="menuButton[6]" visible="false"/>
+	</GuiElement>
+</GUI>

@@ -1,9 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <GUIProfiles>
-	<Profile name="pageBackground" extends="uiFullInGameBackground"> <!-- uiFullInGameBackground - uiFullBlurBG -->
-        <Value name="imageColor" value="0.018 0.016 0.015 0.8"/>
-	</Profile>
-	
 	<Profile name="pageSelectionHeaderText" extends="textDefault">
 		<Value name="screenAlign" value="middleCenter"/>
 		<Value name="positionOrigin" value="middleCenter"/>
@@ -18,15 +14,7 @@
 		<Value name="positionOrigin" value="bottomCenter"/>
 		<Value name="position" value="0px -35px"/>
 	</Profile>
-	
 	<Profile name="pageMarkerState" extends="selectionStateDocked">
-	</Profile>
-	
-	<Profile name="helpPage" extends="emptyPanel">
-		<Value name="screenAlign" value="topLeft"/>
-		<Value name="positionOrigin" value="topLeft"/>
-		<Value name="size" value="1660px 708px"/>
-		<Value name="position" value="130px -237px"/>
 	</Profile>
 	
 	<Profile name="loginText">
@@ -34,6 +22,13 @@
         <Value name="positionOrigin" value="middleCenter"/>
 		<Value name="textSize" value="20px"/>
 		<Value name="textAlignment" value="center"/>
+	</Profile>
+	
+	<Profile name="helpPage" extends="emptyPanel">
+		<Value name="screenAlign" value="topLeft"/>
+		<Value name="positionOrigin" value="topLeft"/>
+		<Value name="size" value="1660px 708px"/>
+		<Value name="position" value="130px -237px"/>
 	</Profile>
 </GUIProfiles>
 	

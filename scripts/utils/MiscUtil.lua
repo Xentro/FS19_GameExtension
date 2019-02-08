@@ -25,7 +25,7 @@ ColorCodes = {
 
 -- First letter must be capital to work with save / load of xml
 Types = {
-	STRING		= "String",
+	-- STRING		= "String",
 	FLOAT		= "Float",
 	INT			= "Int",
 	BOOL		= "Bool"
@@ -109,7 +109,7 @@ end;
 
 function GameExtension:makeTextGlobal(name)
 	if g_i18n:hasText(name) then
-		g_i18n.texts[name] = g_i18n:getText(name);
+		getfenv(0).g_i18n.texts[name] = g_i18n:getText(name);
 	else
 		log("ERROR", "Can't make text ( " .. tostring(name) .. " ) global as we can't find it!");
 	end;
