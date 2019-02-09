@@ -163,6 +163,8 @@ function GameExtensionMenu:createSetting(page, s, name, toolTip, text, value, is
 	item.isCustomSetting = isCustomSetting;
 	item.settingId = settingId; -- custom setting
 	
+	-- We don't want it to change value when inputDisableTime is set
+	item.inputEvent = Utils.overwrittenFunction(item.inputEvent, GameExtensionMenu.inputEventSetting);
 	-- Use for toolTip
 	item.onHighlight = Utils.overwrittenFunction(item.onHighlight, GameExtensionMenu.onHighlightSetting);
 	item.onHighlightRemove = Utils.overwrittenFunction(item.onHighlightRemove, GameExtensionMenu.onHighlightRemoveSetting);

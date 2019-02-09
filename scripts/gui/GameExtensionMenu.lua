@@ -88,7 +88,13 @@ function GameExtensionMenu:inputEvent(action, value, eventUsed)
 		end;
 	end;
 
-	eventUsed = GameExtensionMenu:superClass().inputEvent(self, action, value, eventUsed);
+	return GameExtensionMenu:superClass().inputEvent(self, action, value, eventUsed);
+end;
+
+function GameExtensionMenu:inputEventSetting(oldFunc, action, value, eventUsed)
+	if g_gameExtensionMenu.inputDisableTime <= 0 then
+		return oldFunc(self, action, value, eventUsed);
+	end;
 
 	return eventUsed;
 end;
@@ -227,7 +233,7 @@ function GameExtensionMenu:initializeSettings()
 	self.settingsAreInitialized = true;
 end;
 
-function GameExtensionMenu:createPage(pageName, items) -- Rename!
+function GameExtensionMenu:createPage(pageName, items)
 	local numSettings, countToPageLimit, lastItem, lastTableIndex = 0, 0, 0, {};
 	
 	-- Create an last index table, per page for focus
@@ -279,8 +285,7 @@ function GameExtensionMenu:createPage(pageName, items) -- Rename!
 				newItem.focusId = FocusManager.serveAutoFocusId();
 				FocusManager.guiFocusData["GameExtensionMenu"].idToElementMapping[newItem.focusId] = newItem;
 				
-				-- We are done add
-				table.insert(self.pages[self.currentPageNum][GameExtensionMenu.PAGES_SETTING], newItem);
+				table.insert(self.pages[self.currentPageNum][GameExtensionMenu.PAGES_SETTING], newItem); -- We are done add
 			
 				if currentSetting == 1 then
 					self.pages[self.currentPageNum][GameExtensionMenu.PAGES_FOCUS][GameExtensionMenu.PAGES_FOCUS_FIRST] = currentSetting;
@@ -288,7 +293,7 @@ function GameExtensionMenu:createPage(pageName, items) -- Rename!
 					self.pages[self.currentPageNum][GameExtensionMenu.PAGES_FOCUS][GameExtensionMenu.PAGES_FOCUS_LAST] = currentSetting;
 					
 					-- Create dummy, saves us the hazzle of needing to position the last item
-					local newItem = self.settingTemplate:clone(currentPageElement.elements[1]):delete();
+					newItem = self.settingTemplate:clone(currentPageElement.elements[1]):delete();
 				end;
 			end;
 		end;
@@ -359,11 +364,7 @@ function GameExtensionMenu:onPageNext()
 end;
 
 function GameExtensionMenu:setPage(currentPage, buttonCall)
-	-- if buttonCall and self.currentPage == currentPage then
-	-- 	return; -- We dont want to update the page if its the same
-	-- end;
-	
-	self.currentPage = currentPage;
+	-- We want it to display the page your on even if we are showing something else
 	self.pageSelector:setState(currentPage);
 	
 	for i, marker in ipairs(self.pageMarkers) do
@@ -373,13 +374,13 @@ function GameExtensionMenu:setPage(currentPage, buttonCall)
 			marker:setOverlayState(GuiOverlay.STATE_NORMAL);
 		end;
 	end;
-	
+
 	-- Now we can fool the system...
 	local page = self:getNavigationPageByInt(currentPage);
 	if not page.isAdminPage then
 		if g_currentMission.missionDynamicInfo.isMultiplayer and not g_currentMission:getIsServer() then
 			if not g_currentMission.isMasterUser then
-				currentPage = GameExtensionMenu.PAGE_LOGIN; -- Login Page
+				currentPage = GameExtensionMenu.PAGE_LOGIN;
 			end;
 		end;
 	end;
@@ -387,10 +388,6 @@ function GameExtensionMenu:setPage(currentPage, buttonCall)
 	if GameExtensionMenu.PAGE_FORCE ~= nil and page.isAdminPage then
 		currentPage = GameExtensionMenu.PAGE_FORCE;
 	end;
-	
-	-- Handle the page switching here
-	-- Set focus and overlay status of the 1th setting 
-	-- Can we go negative on currentPage to implement an help page?
 	
 	for i, v in ipairs(self.pages) do
 		v[GameExtensionMenu.PAGES_PAGE]:setVisible(i == currentPage);
@@ -400,25 +397,34 @@ function GameExtensionMenu:setPage(currentPage, buttonCall)
 	self.pageLogin:setVisible(currentPage == GameExtensionMenu.PAGE_LOGIN);
 	
 	-- Focus
+	if self.currentPage ~= currentPage then
+		self.lastFocusedSetting = nil; -- New page, empty
+	end;
+
 	if currentPage >= 1 then
-		-- We could replace this to point towards the last selected setting.
 		local element = self.pages[currentPage][GameExtensionMenu.PAGES_SETTING][GameExtensionMenu.PAGES_FOCUS_FIRST];
+
+		if self.lastFocusedSetting ~= nil then
+			element = self.lastFocusedSetting;
+		end;
 		
 		FocusManager:setFocus(element);
 		element:setOverlayState(GuiOverlay.STATE_FOCUSED); -- Update the focus state
 	end;
+
+	self.currentPage = currentPage;
 end;
 
 
 -- Settings Handeling
 
 -- Type.ModuleName.SettingName
--- Type.PageName.VariableName 	- Custom
+-- Type.PageName.VariableName 	- Custom, Last one aren't used
 GameExtensionMenu.SPLIT_TYPE 	= 1;
 GameExtensionMenu.SPLIT_MODULE 	= 2;
 GameExtensionMenu.SPLIT_SETTING = 3;
 
-function GameExtensionMenu:setSettingElement(value, element)
+function GameExtensionMenu:onClickSetSettingElement(value, element)
 	local res = StringUtil.splitString(".", element.name);
 	
 	if not element.isCustomSetting then
@@ -437,7 +443,7 @@ function GameExtensionMenu:setSettingElement(value, element)
 				log("NOTICE", "Menu: Your trying to set an variable trough the menu which aren't supported, you should make sure to add an function callback to setting " .. element.name);
 			end;
 		else
-			log("ERROR", "Failed setSettingElement() - Setting id ( " .. tostring(element.settingId) .. " ), Page " .. tostring(res[GameExtensionMenu.SPLIT_MODULE]));
+			log("ERROR", "Failed onClickSetSettingElement() - Setting id ( " .. tostring(element.settingId) .. " ), Page " .. tostring(res[GameExtensionMenu.SPLIT_MODULE]));
 		end;
 	end;
 	
@@ -492,6 +498,7 @@ end;
 
 function GameExtensionMenu:updateHelpText(element)
 	self.currentToolTip.selected = element;
+	self.lastFocusedSetting = element; -- Auto focus this setting on open
 end;
 
 function GameExtensionMenu:onHighlightSetting(oldfunc, element)

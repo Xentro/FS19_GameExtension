@@ -22,7 +22,7 @@
 			<GuiElement type="empty" profile="ingameMenuSettingsBox" position="130px -124px" id="pageSettingsTemplate">
 				<GuiElement type="boxLayout" profile="ingameMenuSettingsLayout" position="50px -50px" id="boxLayout">
 					<!-- Using checkedOption mainly for the bool values -->
-					<GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="setSettingElement" onFocus="updateHelpText" id="settingTemplate" toolTipText="This is one epic tool tip!">
+					<GuiElement type="checkedOption" profile="multiTextOptionSettings" onClick="onClickSetSettingElement" onFocus="updateHelpText" id="settingTemplate" toolTipText="This is one epic tool tip!">
 						<GuiElement type="button" profile="multiTextOptionSettingsLeft" />
 						<GuiElement type="button" profile="multiTextOptionSettingsRight"/>
 						<GuiElement type="text"   profile="multiTextOptionSettingsText" />
