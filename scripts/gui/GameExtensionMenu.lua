@@ -69,6 +69,7 @@ end;
 
 function GameExtensionMenu:openMenu()
 	if self:canOpenMenu() then
+		self.inputDisableTime = 100; -- Page selection changed when using gamepad on open
 		g_gui:showGui("GameExtensionMenu");
 	end;
 end;
@@ -159,6 +160,8 @@ function GameExtensionMenu:update(dt)
 	elseif self.currentToolTip.selected ~= nil then
 		self:updateToolTip(self.currentToolTip.selected);	 -- Selected setting element
 	end;
+
+	GameExtensionMenu:superClass().update(self, dt);
 end;
 
 function GameExtensionMenu:onOpen()
