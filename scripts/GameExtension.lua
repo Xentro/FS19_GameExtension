@@ -40,7 +40,7 @@ function GameExtension:loadMap()
 		hud	   = Utils.getFilename("hudElements.dds", 			folderPaths.huds) -- Used in Farmers Touch and Vehicle module
 	};
 	
-	getfenv(0)["g_gameExtensionMenu"] = GameExtensionMenu:new(self);
+	getfenv(0)["g_gameExtensionMenu"] = GameExtensionMenu:new();
 	g_gameExtensionMenu:loadMenu(self);
 	
 	self:callFunction("loadMap");

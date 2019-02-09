@@ -56,7 +56,7 @@ function GameExtensionMenu:loadMenu(parent)
 end;
 
 function GameExtensionMenu:canOpenMenu()
-	if (self.isOpen or not self.canOpen or g_currentMission.isSynchronizingWithPlayers) then
+	if (self:getIsOpen() or not self.canOpen or g_currentMission.isSynchronizingWithPlayers) then
 		return false;
 	end;
 	
@@ -92,7 +92,7 @@ function GameExtensionMenu:inputEvent(action, value, eventUsed)
 	return eventUsed;
 end;
 
-function GameExtensionMenu:onGuiSetupFinished()
+function GameExtensionMenu:onGuiSetupFinished() -- Update menuButton
 	GameExtensionMenu:superClass().onGuiSetupFinished(self);
 	
 	-- Assign the buttons 
@@ -162,8 +162,6 @@ function GameExtensionMenu:update(dt)
 end;
 
 function GameExtensionMenu:onOpen()
-	GameExtensionMenu:superClass().onOpen(self); -- This handles the mouse cursor
-	
 	if self:initializeSettings() then
 		-- Update all setting elements since they could have changed
 		for _, v in ipairs(self.pages) do
@@ -175,6 +173,7 @@ function GameExtensionMenu:onOpen()
 	
 	self:setPage(self.currentPage, false);
 	g_depthOfFieldManager:setBlurState(true);
+	GameExtensionMenu:superClass().onOpen(self); -- This handles the mouse cursor
 end;
 
 function GameExtensionMenu:onClose()
@@ -187,24 +186,25 @@ end;
 
 function GameExtensionMenu:initializeSettings()
 	if self.settingsAreInitialized then return true; end;
-	
 	log("DEBUG", "Menu - initializeSettings() ");
 	
 	-- Hide templates
-	self.pageSettingsTemplate:setVisible(false);
-	self.settingTemplate:setVisible(false);
+	self:setElementVisible(self.pageSettingsTemplate, false);
+	self:setElementVisible(self.settingTemplate, false);
 	
 	local pagesTitles = {};
-	
+	self.navigationIntToName = {};
+
 	for i, name in pairs(self.pageDataIntToName) do
 		local p = self.pageData[name];
 		local numNeededPages = math.max(math.ceil(#p.settings / GameExtensionMenu.SETTINGS_PER_PAGE), 1);
 		
 		for k = 1, numNeededPages do
 			table.insert(pagesTitles, p.pageName);
+			table.insert(self.navigationIntToName, name);
 		end;
 	
-		self:createPageE(name, p.settings);
+		self:createPage(name, p.settings);
 	end;
 	
 	if self.pageMarkerTemplate ~= nil then
@@ -224,7 +224,7 @@ function GameExtensionMenu:initializeSettings()
 	self.settingsAreInitialized = true;
 end;
 
-function GameExtensionMenu:createPageE(pageName, items)
+function GameExtensionMenu:createPage(pageName, items) -- Rename!
 	local numSettings, countToPageLimit, lastItem, lastTableIndex = 0, 0, 0, {};
 	
 	-- Create an last index table, per page for focus
@@ -243,14 +243,11 @@ function GameExtensionMenu:createPageE(pageName, items)
 		end;
 	end;
 	
-	lastTableIndex[lastItem] = lastItem;
-	
+	lastTableIndex[lastItem] = lastItem; -- We havent reached page limit, add last setting
 	log("DEBUG", "Menu: We have " .. numSettings .. " settings for page ( " .. pageName .. " )");
 	
-	-- Create page even if no settings
 	if numSettings == 0 then
-		self:clonePage();
-		return;
+		self:clonePage(); -- Create page even if no settings
 	else
 		local currentSetting, currentPageElement = 0;
 		
@@ -261,15 +258,13 @@ function GameExtensionMenu:createPageE(pageName, items)
 			
 			if g_gameExtension:getBlackListItem(s.name) == GameExtension.BL_STATE_NORMAL then
 				currentSetting = currentSetting + 1;
-				
+
 				-- Create new page
 				if (currentSetting == 1 or currentSetting > GameExtensionMenu.SETTINGS_PER_PAGE) then
 					currentSetting = 1;
 					currentPageElement = self:clonePage();
 				end;
-				
-				-- type.ModuleName.SettingName
-				-- type.PageName.VariableName -- we don't use last one.
+
 				if not isCustomSetting then
 					local translation = Utils.getNoNil(s.isMod, g_i18n);
 					newItem = self:createSetting(currentPageElement, s, s.inputType .. "." .. item.module .. "." .. s.name, translation:getText("toolTip_" .. s.name), translation:getText(s.name), s.value, isCustomSetting);
@@ -278,7 +273,7 @@ function GameExtensionMenu:createPageE(pageName, items)
 				end;
 				
 				-- Update focus
-				newItem.focusId = FocusManager.serveAutoFocusId(); -- "GE_autoId_" .. ((self.currentPageNum - 1) * GameExtensionMenu.SETTINGS_PER_PAGE) + currentSetting;
+				newItem.focusId = FocusManager.serveAutoFocusId();
 				FocusManager.guiFocusData["GameExtensionMenu"].idToElementMapping[newItem.focusId] = newItem;
 				
 				-- We are done add
@@ -377,7 +372,7 @@ function GameExtensionMenu:setPage(currentPage, buttonCall)
 	end;
 	
 	-- Now we can fool the system...
-	local page = self:getPageByInt(currentPage);
+	local page = self:getNavigationPageByInt(currentPage);
 	if not page.isAdminPage then
 		if g_currentMission.missionDynamicInfo.isMultiplayer and not g_currentMission:getIsServer() then
 			if not g_currentMission.isMasterUser then

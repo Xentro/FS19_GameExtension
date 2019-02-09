@@ -10,6 +10,12 @@
 function GameExtensionMenu:setIsLoaded(state)
 	self.isLoaded = state;
 end;
+	
+function GameExtensionMenu:setElementVisible(element, state)
+	if element ~= nil then
+		element:setVisible(state);
+	end;
+end;
 
 function GameExtensionMenu:setString(first, rest)
 	return first:upper() .. rest:lower();
@@ -33,6 +39,10 @@ end;
 
 function GameExtensionMenu:getPageByInt(i)
 	return self:getPage(self.pageDataIntToName[i]);
+end;
+
+function GameExtensionMenu:getNavigationPageByInt(i)
+	return self:getPage(self.navigationIntToName[i]);
 end;
 
 function GameExtensionMenu:getPageCount()
@@ -191,13 +201,22 @@ end;
 function GameExtensionMenu:flushSettings()
 	log("DEBUG", "Menu - Flushing settings");
 	
-	-- Delete stuff
+	for _, element in ipairs(self.pages) do
+		for _, v in ipairs(element[GameExtensionMenu.PAGES_SETTING]) do
+			v:delete();
+		end;
+		
+		element[GameExtensionMenu.PAGES_PAGE]:delete();
+	end;
+
 	for i, element in ipairs(self.pageMarkers) do
 		element:delete();
 	end;
 	
-	self.pageMarkers = {};
-	
+	self.pages 			= {};
+	self.pageMarkers 	= {};
+	self.currentPageNum = 0;
+
 	self.settingsAreInitialized = false;
 end;
 
