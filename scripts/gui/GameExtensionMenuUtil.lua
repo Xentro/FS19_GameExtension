@@ -50,8 +50,14 @@ function GameExtensionMenu:getPageCount()
 end;
 
 function GameExtensionMenu:checkPageCount(current, target, new)
-	if current == target then
-		return new;
+	if current > self.currentPage then
+		if current > target then
+			return new;
+		end;
+	elseif current < self.currentPage then
+		if current < target then
+			return new;
+		end;
 	end;
 
 	return current;

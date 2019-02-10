@@ -20,7 +20,7 @@ settings = g_gameExtension:addSetting(settings, { name = "CRUISE_SCROOL_SPEED", 
 
 g_gameExtension:addModule("MISC", M_Misc, settings, false);
 
-g_gameExtension:addSpecialization("Cruise_Control", Utils.getFilename("Cruise_Control.lua", folderPaths.vehicles));
+g_gameExtension:addSpecialization("Cruise_Control", Utils.getFilename("Cruise_Control.lua", FolderPaths.vehicles));
 
 
 function M_Misc:loadMap()
@@ -42,6 +42,10 @@ end;
 
 
 -- Show "Open GUI menu" in help window
+
+function M_Misc:callbackSetShowHelpButton(eventId)
+	M_Misc.setShowHelpButton(g_gameExtension, nil, eventId);
+end;
 
 function M_Misc:setShowHelpButton(state, eventId)
 	if eventId ~= nil then -- Called trough GameExtension.lua

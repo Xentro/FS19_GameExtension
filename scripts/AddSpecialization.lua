@@ -193,7 +193,7 @@ function AddSpecialization:add()
 			end;
 		end;
 		
-		print(string.format(AddSpecialization.printHeader, ss.name, "Info", "We have successfully added specialization Into ( " .. currentTypeCount[1] .. " / " .. currentTypeCount[2] .. ") of the vehicleTypes."));
+		print(string.format(AddSpecialization.printHeader, ss.name, "Info", "We have successfully added specialization Into ( " .. currentTypeCount[1] .. " / " .. currentTypeCount[2] .. " ) of the vehicleTypes."));
 		
 		if ss.l10nNameTag ~= nil then
 			-- make l10n global 

@@ -37,7 +37,7 @@ function Cruise_Control:onRegisterActionEvents(isActiveForInput, isActiveForInpu
 		
 		self:clearActionEventsTable(spec.actionEvents);
 		
-		if self:getIsActiveForInput(true) then
+		if isActiveForInputIgnoreSelection then
 			_, eventId = self:addActionEvent(spec.actionEvents, InputAction.X_CRUISE_ACTIVATE, self, Cruise_Control.onCruiseAction, true, true, true, true, nil, nil, true);
 			_, eventId = self:addActionEvent(spec.actionEvents, InputAction.X_CRUISE_DOWN, self, Cruise_Control.onCruiseActionSpeed, false, true, false, true, nil, nil, true);
 			_, eventId = self:addActionEvent(spec.actionEvents, InputAction.X_CRUISE_UP, self, Cruise_Control.onCruiseActionSpeed, false, true, false, true, nil, nil, true);

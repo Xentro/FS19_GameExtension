@@ -12,11 +12,8 @@ GameExtension.version 		  = g_modManager.nameToMod[g_currentModName].version;
 GameExtension.modName 		  = g_currentModName;
 GameExtension.modDirectory    = g_currentModDirectory;
 
-GameExtension.classOverrides  = {}; -- Delay our overrides so that other mods can alter there behaviour
-GameExtension.specializations = {};
-
 -- Paths
-folderPaths = {
+FolderPaths = {
 	huds		= GameExtension.modDirectory .. "huds/",
 	menu		= GameExtension.modDirectory .. "menu/",
 	scripts 	= GameExtension.modDirectory .. "scripts/",
@@ -27,21 +24,30 @@ folderPaths = {
 	vehicles 	= GameExtension.modDirectory .. "scripts/vehicles/"
 };
 
-source(Utils.getFilename("DebugUtil.lua", folderPaths.utils));
+source(Utils.getFilename("DebugUtil.lua", FolderPaths.utils));
+
+function GameExtension:init()
+	-- Used in functions
+	self.classOverrides 	  = {}; -- Delay our overrides so that other mods can alter there behaviour
+	self.specializations 	  = {};
+	self.colorCodes 	  	  = {};
+	self.tempDisableSetting   = {};
+	self.actionEventInfo 	  = {};
+	self.actionEventNameToInt = {};
+end;
 
 function GameExtension:loadMap()
 	self.firstTimeRun 	 = false;
 	self.updateTickRate  = {current = 30, limit = 30}; -- Call on 1th update frame
-	self.actionEventInfo = {};
 	
 	self.filenames = {
 		server = Utils.getFilename("/GameExtension_Server.xml", g_currentMission.missionInfo.savegameDirectory),
 		client = Utils.getFilename("GameExtension_Client.xml",  getUserProfileAppPath()),
-		hud	   = Utils.getFilename("hudElements.dds", 			folderPaths.huds) -- Used in Farmers Touch and Vehicle module
+		hud	   = Utils.getFilename("hudElements.dds", 			FolderPaths.huds) -- Used in Farmers Touch and Vehicle module
 	};
 	
 	getfenv(0)["g_gameExtensionMenu"] = GameExtensionMenu:new();
-	g_gameExtensionMenu:loadMenu(self);
+	g_gameExtensionMenu:loadMenu();
 	
 	self:callFunction("loadMap");
 	
@@ -111,20 +117,21 @@ end;
 
 function GameExtension:registerActionEvents()
 	for name, v in pairs(g_gameExtension.actionEventInfo) do
-		local eventAdded, eventId = g_inputBinding:registerActionEvent(name, v.caller, v.callback, v.triggerUp, v.triggerDown, v.triggerAlways, v.startActive, v.callbackState);
+		local eventAdded, eventId = g_inputBinding:registerActionEvent(v.action, v.object, v.callback, v.buttonStates[1], v.buttonStates[2], v.buttonStates[3], v.buttonStates[4], v.buttonStates[5]);
 		
-		v.eventId = eventId;
-		
-		if v.text ~= nil and v.text ~= "" then
-			g_inputBinding:setActionEventText(eventId, v.text);
-	
-			if M_Misc ~= nil then
-				M_Misc.setShowHelpButton(g_gameExtension, nil, eventId);
+		if eventAdded then
+			v.eventId = eventId;
+			
+			if v.text ~= nil and v.text ~= "" then
+				g_inputBinding:setActionEventText(eventId, v.text);
+				g_inputBinding:setActionEventTextVisibility(eventId, v.showText);
 			end;
-		end;
-		
-		if not eventAdded then
-			log("WARNING", "Can't add action event for " .. tostring(eventId));
+			
+			if v.callbackOnCreate ~= nil then
+				v.callbackOnCreate(v.object, eventId);
+			end;
+		else
+			log("ERROR", "Failed to add InputAction ( " .. v.action .. " ), eventId ( " .. tostring(eventId) .. " ) for " .. v.name);
 		end;
 	end;
 end;
@@ -132,18 +139,19 @@ end;
 -- Only allow one instance of this mod!
 if g_gameExtension == nil then
 	getfenv(0)["g_gameExtension"] = GameExtension;
-	
+	g_gameExtension:init();
+
 	-- Source Files --
-	source(Utils.getFilename("MiscUtil.lua", 			folderPaths.utils));
-	source(Utils.getFilename("SettingsUtil.lua", 	   	folderPaths.utils));
-	source(Utils.getFilename("SettingEvent.lua", 	  	folderPaths.events));
-	source(Utils.getFilename("SynchSettingsEvent.lua", 	folderPaths.events));
+	source(Utils.getFilename("MiscUtil.lua", 			FolderPaths.utils));
+	source(Utils.getFilename("SettingsUtil.lua", 	   	FolderPaths.utils));
+	source(Utils.getFilename("SettingEvent.lua", 	  	FolderPaths.events));
+	source(Utils.getFilename("SynchSettingsEvent.lua", 	FolderPaths.events));
 	
-	source(Utils.getFilename("GameExtensionMenu.lua", 		folderPaths.gui));
-	source(Utils.getFilename("GameExtensionMenuUtil.lua", 	folderPaths.gui));
+	source(Utils.getFilename("GameExtensionMenu.lua", 		FolderPaths.gui));
+	source(Utils.getFilename("GameExtensionMenuUtil.lua", 	FolderPaths.gui));
 	
 	g_gameExtension:loadModDescData();
-	source(Utils.getFilename("AddSpecialization.lua", 	folderPaths.scripts)); -- Add the GameExtension Specialization
+	source(Utils.getFilename("AddSpecialization.lua", 	FolderPaths.scripts)); -- Add the GameExtension Specialization
 	
 	FSBaseMission.registerActionEvents = Utils.appendedFunction(FSBaseMission.registerActionEvents, GameExtension.registerActionEvents);
 

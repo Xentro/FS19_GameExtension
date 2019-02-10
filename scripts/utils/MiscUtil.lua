@@ -7,22 +7,6 @@
 -- @website:	www.Xentro.se
 -- 
 
-ColorCodes = {
-	BG_GREY_1		= {0.0284, 0.0284, 0.0284, 1}, -- R, G, B, Alpha
-	BG_BRIGHT_BLACK = {0.0075, 0.0075, 0.0075, 1},
-	
-	TEXT_GREEN		= {0.2122, 0.5271, 0.0307, 1},
-	TEXT_ORANGE		= {1.0000, 0.4910, 0.0000, 1},
-	TEXT_YELLOW		= {0.9010, 0.8390, 0.1560, 1},
-	TEXT_RED		= {0.8069, 0.0097, 0.0097, 1},
-	TEXT_LIGHT_BLUE	= {0.8069, 0.0097, 0.0097, 1},
-	
-	ICON_GREY		= {0.1900, 0.1900, 0.1900, 1},
-	ICON_ORANGE		= {0.9046, 0.2874, 0.0123, 1},
-	ICON_GREEN		= {0.2122, 0.5271, 0.0307, 1},
-	ICON_RED		= {0.7843, 0.0000, 0.0000, 1}
-};
-
 -- First letter must be capital to work with save / load of xml
 Types = {
 	-- STRING		= "String",
@@ -39,6 +23,11 @@ function GameExtension:loadModDescData()
 	
 	if GameExtension.MESSAGE_MODE == GameExtension.DEBUG then
 		log("NOTICE", "Debug mode is activated.");
+
+		local v = getXMLInt(xmlFile, "modDesc#descVersion"); 
+		if v < g_maxModDescVersion then
+			log("NOTICE", "Current descVersion is ( " .. v .. " ), we should change this to ( " .. g_maxModDescVersion .. " )");
+		end;
 	end;
 	
 	local i = 0;
@@ -65,14 +54,20 @@ function GameExtension:loadModDescData()
 	delete(xmlFile);
 end;
 
-
--- Misc --
 function GameExtension:getIsActiveForInput()
-	if g_gui:getIsGuiVisible() or g_currentMission.isPlayerFrozen then -- or g_currentMission.inGameMessage:getIsVisible() then
+	if g_gui:getIsGuiVisible() or g_currentMission.isPlayerFrozen then
 		return false;
 	end;
 	
 	return true;
+end;
+
+function GameExtension:getColorCode(name)
+	if self.colorCodes[name] ~= nil then
+		return unpack(self.colorCodes[name]);
+	end;
+
+	return 1, 1, 1, 1;
 end;
 
 function GameExtension:getOptions(options)
@@ -80,11 +75,9 @@ function GameExtension:getOptions(options)
 	local rowToValue = {};
 	local increment = (options[3] - options[2]) / options[1];
 
-	--[[
-	1 = num options
-	2 = min
-	3 = max
-	]]
+	-- 1 = num options
+	-- 2 = min
+	-- 3 = max
 
 	for k = 1, options[1] do
 		local v = (increment * (k - 1)) + options[2];
@@ -107,24 +100,40 @@ function GameExtension:getOptionsText(options)
 	return {valueToRow = valueToRow, rowToValue = rowToValue, isText = true};
 end;
 
-function GameExtension:makeTextGlobal(name)
+function GameExtension:getInputAction(name)
+	if self.actionEventNameToInt[name] ~= nil then
+		return self.actionEventNameToInt[name];
+	end;
+
+	return nil;
+end;
+
+function GameExtension:addColorCode(name, color)
+	self.colorCodes[name] = color;
+end;
+
+function GameExtension:addInputAction(name, action, object, text, showText, callback, callbackOnCreate, buttonStates) -- Can't be called later then loadMap()
+	table.insert(self.actionEventInfo, {action = action, object = object, text = text, showText = showText, callback = callback, callbackOnCreate = callbackOnCreate, buttonStates = buttonStates});
+	self.actionEventNameToInt[name] = #self.actionEventInfo;
+end;
+
+function GameExtension:addTextToGlobal(name)
 	if g_i18n:hasText(name) then
 		getfenv(0).g_i18n.texts[name] = g_i18n:getText(name);
 	else
-		log("ERROR", "Can't make text ( " .. tostring(name) .. " ) global as we can't find it!");
+		log("ERROR", "Can't make text ( " .. tostring(name) .. " ) global as it can't be found!");
 	end;
 end;
 
--- {bottom left X, bottom left Y, top right X, top right Y}, {file size width, file size height}
 function GameExtension:normalizeUVs(uv, ref)
 	local uvs = {
-		uv[1], uv[2],	-- v0
-		uv[1], uv[4],	-- v1
-		uv[3], uv[2],	-- v2
-		uv[3], uv[4]	-- v3
+		uv[1], uv[2],	-- v0 - Bottom left X
+		uv[1], uv[4],	-- v1 - Bottom left Y
+		uv[3], uv[2],	-- v2 - Top right X
+		uv[3], uv[4]	-- v3 - Top right Y
 	};
 	
-	uvs = getNormalizedValues(uvs, Utils.getNoNil(ref, {512, 512}));
+	uvs = getNormalizedValues(uvs, Utils.getNoNil(ref, {512, 512})); -- width, height
 	
 	return uvs;
 end;
@@ -203,9 +212,5 @@ end;
 
 -- Disable setting from showing in GUI and to be saved
 function GameExtension:disableSettingForMod(modName, name, blackListState)
-	if self.tempDisableSetting == nil then
-		self.tempDisableSetting = {};
-	end;
-	
 	table.insert(self.tempDisableSetting, {modName = modName, name = name, state = Utils.getNoNil(blackListState, GameExtension.BL_STATE_DONT_SHOW)});
 end;

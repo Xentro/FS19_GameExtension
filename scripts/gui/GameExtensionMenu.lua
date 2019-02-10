@@ -45,14 +45,14 @@ GameExtensionMenu = {
 
 -- Menu stuff
 
-function GameExtensionMenu:loadMenu(parent)
-	parent:makeTextGlobal("PAGE_LOGIN");
+function GameExtensionMenu:loadMenu()
+	g_gameExtension:addTextToGlobal("PAGE_LOGIN");
 	
-	g_gui:loadProfiles(folderPaths.menu .. "GameExtensionProfiles.xml");
-	g_gui:loadGui(folderPaths.menu .. "GameExtensionMenu.xml", "GameExtensionMenu", g_gameExtensionMenu);
+	g_gui:loadProfiles(FolderPaths.menu .. "GameExtensionProfiles.xml");
+	g_gui:loadGui(FolderPaths.menu .. "GameExtensionMenu.xml", "GameExtensionMenu", g_gameExtensionMenu);
 	
-	-- Add inputbinding, GameExtension.lua does the rest.
-	parent.actionEventInfo["TOGGLE_GUI_SCREEN"] = {eventId = "", caller = g_gameExtensionMenu, callback = GameExtensionMenu.openMenu, triggerUp = false, triggerDown = true, triggerAlways = false, startActive = true, callbackState = nil, text = g_i18n:getText("TOGGLE_GUI_SCREEN"), textVisibility = false};
+	local buttonStates = {false, true, false, true, nil}; -- Up, Down, Always, Start Active, callbackState
+	g_gameExtension:addInputAction("GameExtension_Menu", InputAction.TOGGLE_GUI_SCREEN, g_gameExtensionMenu, g_i18n:getText("TOGGLE_GUI_SCREEN"), false, GameExtensionMenu.openMenu, M_Misc.callbackSetShowHelpButton, buttonStates);
 end;
 
 function GameExtensionMenu:canOpenMenu()
@@ -99,7 +99,7 @@ function GameExtensionMenu:inputEventSetting(oldFunc, action, value, eventUsed)
 	return eventUsed;
 end;
 
-function GameExtensionMenu:onGuiSetupFinished() -- Update menuButton
+function GameExtensionMenu:onGuiSetupFinished() -- Update menuButtons
 	GameExtensionMenu:superClass().onGuiSetupFinished(self);
 	
 	-- Assign the buttons 
@@ -353,13 +353,13 @@ function GameExtensionMenu:onClickPageSelection(currentPage)
 	self:setPage(currentPage, false);
 end;
 
-function GameExtensionMenu:onPagePrevious()
-	local page = self:checkPageCount(self.currentPage - 1, 0, self:getPageCount());
+function GameExtensionMenu:onPagePrevious(arg1)
+	local page = self:checkPageCount(self.currentPage - 1, 1, self:getPageCount());
 	self:setPage(page, true);
 end;
 
 function GameExtensionMenu:onPageNext()
-	local page = self:checkPageCount(self.currentPage + 1, self:getPageCount() + 1, 1);
+	local page = self:checkPageCount(self.currentPage + 1, self:getPageCount(), 1);
 	self:setPage(page, true);
 end;
 
@@ -375,9 +375,11 @@ function GameExtensionMenu:setPage(currentPage, buttonCall)
 		end;
 	end;
 
+	self.currentPage = currentPage; -- We need this intact for navigation
+
 	-- Now we can fool the system...
 	local page = self:getNavigationPageByInt(currentPage);
-	if not page.isAdminPage then
+	if page.isAdminPage then
 		if g_currentMission.missionDynamicInfo.isMultiplayer and not g_currentMission:getIsServer() then
 			if not g_currentMission.isMasterUser then
 				currentPage = GameExtensionMenu.PAGE_LOGIN;
@@ -385,8 +387,8 @@ function GameExtensionMenu:setPage(currentPage, buttonCall)
 		end;
 	end;
 	
-	if GameExtensionMenu.PAGE_FORCE ~= nil and page.isAdminPage then
-		currentPage = GameExtensionMenu.PAGE_FORCE;
+	if GameExtensionMenu.PAGE_FORCE ~= nil then
+		currentPage = GameExtensionMenu.PAGE_FORCE; -- For testing purposes
 	end;
 	
 	for i, v in ipairs(self.pages) do
@@ -411,8 +413,6 @@ function GameExtensionMenu:setPage(currentPage, buttonCall)
 		FocusManager:setFocus(element);
 		element:setOverlayState(GuiOverlay.STATE_FOCUSED); -- Update the focus state
 	end;
-
-	self.currentPage = currentPage;
 end;
 
 
