@@ -51,9 +51,15 @@ function M_Misc:setShowHelpButton(state, eventId)
 	if eventId ~= nil then -- Called trough GameExtension.lua
 		g_inputBinding:setActionEventTextVisibility(eventId, g_gameExtension:getSetting("MISC", "SHOW_HELP_BUTTON"));
 	else
-		for name, v in pairs(self.actionEventInfo) do
-			if v.text ~= nil and v.text ~= "" then
-				g_inputBinding:setActionEventTextVisibility(v.eventId, state);
+		local buttonIds = {self:getInputAction("GameExtension_Menu_Player"), self:getInputAction("GameExtension_Menu_Vehicle")};
+
+		for _, i in pairs(buttonIds) do
+			local v = self.actionEventInfo[i];
+			
+			if v ~= nil and v.eventId ~= nil then
+				if v.text ~= nil and v.text ~= "" then
+					g_inputBinding:setActionEventTextVisibility(v.eventId, state);
+				end;
 			end;
 		end;
 	end;

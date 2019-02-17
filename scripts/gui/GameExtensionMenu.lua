@@ -51,8 +51,9 @@ function GameExtensionMenu:loadMenu()
 	g_gui:loadProfiles(FolderPaths.menu .. "GameExtensionProfiles.xml");
 	g_gui:loadGui(FolderPaths.menu .. "GameExtensionMenu.xml", "GameExtensionMenu", g_gameExtensionMenu);
 	
-	local buttonStates = {false, true, false, true, nil}; -- Up, Down, Always, Start Active, callbackState
-	g_gameExtension:addInputAction("GameExtension_Menu", InputAction.TOGGLE_GUI_SCREEN, g_gameExtensionMenu, g_i18n:getText("TOGGLE_GUI_SCREEN"), false, GameExtensionMenu.openMenu, M_Misc.callbackSetShowHelpButton, buttonStates);
+	local buttonStates  = {false, true, false, true, nil}; -- Up, Down, Always, Start Active, callbackState
+	g_gameExtension:addInputAction("GameExtension_Menu_Player",  Player.INPUT_CONTEXT_NAME,  InputAction.TOGGLE_GUI_SCREEN, g_gameExtensionMenu, g_i18n:getText("TOGGLE_GUI_SCREEN"), false, GameExtensionMenu.openMenu, M_Misc.callbackSetShowHelpButton, buttonStates);
+	-- g_gameExtension:addInputAction("GameExtension_Menu_Vehicle", Vehicle.INPUT_CONTEXT_NAME, InputAction.TOGGLE_GUI_SCREEN, g_gameExtensionMenu, g_i18n:getText("TOGGLE_GUI_SCREEN"), false, GameExtensionMenu.openMenu, M_Misc.callbackSetShowHelpButton, buttonStates);
 end;
 
 function GameExtensionMenu:canOpenMenu()
@@ -440,10 +441,10 @@ function GameExtensionMenu:onClickSetSettingElement(value, element)
 			if s.func ~= nil then
 				s.func(s.parent, value);
 			else
-				log("Notice", "Menu: Your trying to set an variable trough the menu which aren't supported, you should make sure to add an function callback to setting " .. element.name);
+				g_gameExtension:log("Notice", "Menu: Your trying to set an variable trough the menu which aren't supported, you should make sure to add an function callback to setting " .. element.name);
 			end;
 		else
-			log("Error Menu", "Failed onClickSetSettingElement() - Setting id ( " .. tostring(element.settingId) .. " ), Page " .. tostring(res[GameExtensionMenu.SPLIT_MODULE]));
+			g_gameExtension:log("Error Menu", "Failed onClickSetSettingElement() - Setting id ( " .. tostring(element.settingId) .. " ), Page " .. tostring(res[GameExtensionMenu.SPLIT_MODULE]));
 		end;
 	end;
 	

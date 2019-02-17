@@ -116,7 +116,7 @@ end;
 
 function GameExtensionMenu:addSetting(item, pageName)
 	if self.settingNameToIndex[item.name] ~= nil then
-		log("Error Menu", "The setting name your trying to add ( " .. item.name .. " ) is already added, it must be an unique name.");
+	g_gameExtension:log("Error Menu", "The setting name your trying to add ( " .. item.name .. " ) is already added, it must be an unique name.");
 		return;
 	end;
 	
@@ -125,7 +125,7 @@ function GameExtensionMenu:addSetting(item, pageName)
 		if Types[item.inputType:upper()] ~= nil then
 			item.inputType = Types[item.inputType:upper()]; -- Make sure the formating is what we expect.
 		else
-			log("Error Menu", "InputType for setting " .. item.name .. " aren't valid, only float, int or bool.");
+			g_gameExtension:log("Error Menu", "InputType for setting " .. item.name .. " aren't valid, only float, int or bool.");
 			return;
 		end;
 	end;
@@ -141,7 +141,7 @@ function GameExtensionMenu:addSettingsToPage(name, p)
 		if p.pageName ~= nil then
 			self:addPage(name, p.pageName, p.isAdminPage);
 		else
-			log("Error Menu", "The page your trying to add ( " .. name .. " ) is missing data and won't be created.");
+			g_gameExtension:log("Error Menu", "The page your trying to add ( " .. name .. " ) is missing data and won't be created.");
 		end;
 	end;
 	

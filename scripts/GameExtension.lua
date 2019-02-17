@@ -25,6 +25,8 @@ FolderPaths = {
 };
 
 function GameExtension:init(xmlFile)
+	local xmlFile = loadXMLFile("GEmodDesc", Utils.getFilename("modDesc.xml", g_gameExtension.modDirectory));
+	
 	-- Used in functions
 	self.classOverrides 	  = {}; -- Delay our overrides so that other mods can alter there behaviour
 	self.specializations 	  = {};
@@ -39,16 +41,20 @@ function GameExtension:init(xmlFile)
 	self:loadDebugCategories(xmlFile, "modDesc.gameExtension.debug");
 
 	-- Source Files --
-	source(Utils.getFilename("MiscUtil.lua", 			FolderPaths.utils));
-	source(Utils.getFilename("SettingsUtil.lua", 	   	FolderPaths.utils));
-	source(Utils.getFilename("SettingEvent.lua", 	  	FolderPaths.events));
-	source(Utils.getFilename("SynchSettingsEvent.lua", 	FolderPaths.events));
+	source(Utils.getFilename("MiscUtil.lua", 				FolderPaths.utils));
+	source(Utils.getFilename("SettingsUtil.lua", 	   		FolderPaths.utils));
+	source(Utils.getFilename("SettingEvent.lua", 	  		FolderPaths.events));
+	source(Utils.getFilename("SynchSettingsEvent.lua", 		FolderPaths.events));
 	source(Utils.getFilename("GameExtensionMenu.lua", 		FolderPaths.gui));
 	source(Utils.getFilename("GameExtensionMenuUtil.lua", 	FolderPaths.gui));
+	source(Utils.getFilename("AddSpecialization.lua", 		FolderPaths.scripts)); -- Add the GameExtension Specialization
 	
-	self:loadModDescData(xmlFile); -- Loading modules
+	self:loadModDescData(xmlFile); -- Load Modules
 
-	source(Utils.getFilename("AddSpecialization.lua", 	FolderPaths.scripts)); -- Add the GameExtension Specialization
+	FSBaseMission.registerActionEvents = Utils.appendedFunction(FSBaseMission.registerActionEvents, GameExtension.registerActionEvents);
+
+	delete(xmlFile);
+	addModEventListener(GameExtension);
 end;
 
 function GameExtension:loadMap()
@@ -78,7 +84,13 @@ end;
 
 function GameExtension:deleteMap()
 	self:callFunction("deleteMap");
-	
+
+	for name, v in pairs(g_gameExtension.actionEventInfo) do
+		g_inputBinding:beginActionEventsModification(v.context);
+		g_inputBinding:removeActionEventsByTarget(v.object);
+		g_inputBinding:endActionEventsModification();
+	end;
+
 	if g_gameExtensionMenu ~= nil then
 		g_gameExtensionMenu:delete();
 		g_gameExtensionMenu = nil;
@@ -132,6 +144,8 @@ end;
 
 function GameExtension:registerActionEvents()
 	for name, v in pairs(g_gameExtension.actionEventInfo) do
+		-- g_inputBinding:beginActionEventsModification(v.context);
+		
 		local eventAdded, eventId = g_inputBinding:registerActionEvent(v.action, v.object, v.callback, v.buttonStates[1], v.buttonStates[2], v.buttonStates[3], v.buttonStates[4], v.buttonStates[5]);
 		
 		if eventAdded then
@@ -146,22 +160,17 @@ function GameExtension:registerActionEvents()
 				v.callbackOnCreate(v.object, eventId);
 			end;
 		else
-			g_gameExtension:log("Error", "Failed to add InputAction ( " .. v.action .. " ), eventId ( " .. tostring(eventId) .. " ) for " .. v.name);
+			g_gameExtension:log("Error", "Failed to add InputAction ( " .. v.action .. " ) for " .. v.name);
 		end;
+
+		-- g_inputBinding:endActionEventsModification();
 	end;
 end;
 
 -- Only allow one instance of this mod!
 if g_gameExtension == nil then
-	getfenv(0)["g_gameExtension"] = GameExtension;
-
-	local xmlFile = loadXMLFile("GEmodDesc", Utils.getFilename("modDesc.xml", g_gameExtension.modDirectory));
-	g_gameExtension:init(xmlFile);
-	delete(xmlFile);
-
-	FSBaseMission.registerActionEvents = Utils.appendedFunction(FSBaseMission.registerActionEvents, GameExtension.registerActionEvents);
-	
-	addModEventListener(GameExtension);
+	getfenv(0)["g_gameExtension"] = GameExtension;	
+	g_gameExtension:init();
 else
 	g_gameExtension:log("Error", "There are multiply versions of this mod! This mod ( " .. GameExtension.modName .. " ) will now be disabled.");
 	GameExtension = nil;

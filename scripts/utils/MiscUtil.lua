@@ -105,8 +105,8 @@ function GameExtension:addColorCode(name, color)
 	self.colorCodes[name] = color;
 end;
 
-function GameExtension:addInputAction(name, action, object, text, showText, callback, callbackOnCreate, buttonStates) -- Can't be called later then loadMap()
-	table.insert(self.actionEventInfo, {action = action, object = object, text = text, showText = showText, callback = callback, callbackOnCreate = callbackOnCreate, buttonStates = buttonStates});
+function GameExtension:addInputAction(name, context, action, object, text, showText, callback, callbackOnCreate, buttonStates) -- Can't be called later then loadMap()
+	table.insert(self.actionEventInfo, {name = name, context = context, action = action, object = object, text = text, showText = showText, callback = callback, callbackOnCreate = callbackOnCreate, buttonStates = buttonStates});
 	self.actionEventNameToInt[name] = #self.actionEventInfo;
 end;
 
