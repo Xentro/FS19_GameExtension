@@ -7,105 +7,124 @@
 -- @website:	www.Xentro.se
 -- 
 
-GameExtension.ERROR 		= 0;
-GameExtension.WARNING 		= 1;
-GameExtension.NOTICE 		= 2;
-GameExtension.DEBUG 		= 3;
-GameExtension.MESSAGE_MODE 	= GameExtension.NOTICE;
+function GameExtension:loadDebugCategories(xmlFile, parentKey, showSubCategory, parentName)
+	showSubCategory = Utils.getNoNil(showSubCategory, true);
+	parentName		= Utils.getNoNil(parentName, "");
 
-GameExtension.visualDebug 	= {};
+	local k = parentKey;
+	local i = 0;
+	while true do
+		local key = string.format(k .. ".category(%d)", i);
+		if not hasXMLProperty(xmlFile, key) then break; end;
+		
+		local name = getXMLString(xmlFile, key .. "#name");
+		local show = Utils.getNoNil(getXMLBool(xmlFile, key .. "#show"), true);
+		
+		if name ~= nil then
+			name = parentName .. name;
 
--- Print message to log
-function log(mode, message)
-	local debugLevel = -1; -- Forced debug
-	local t = "DEBUG";
-	
-	if mode ~= nil then
-		if GameExtension[mode] ~= nil then
-			debugLevel = GameExtension[mode];
-			t = mode;
-		elseif type(mode) == "number" then
-			debugLevel = mode;
+			if self.debugCategories[name] == nil then
+				if not showSubCategory then
+					show = false;
+				end;
+				
+				self:addLogState(name, show);
+				self:loadDebugCategories(xmlFile, key, show, name .. " ");
+			else
+				print("Dude! The debug category ( " .. name .. " ) already exists!");
+			end;
 		end;
-	end;
-	
-	if debugLevel <= GameExtension.MESSAGE_MODE then
-		print("  GameExtension ( v" .. GameExtension.version .. " ) - " .. t .. ": " .. tostring(message));
+
+		i = i + 1;
 	end;
 end;
 
--- Print table to log
-function logTable(t, depth, name)
-	if GameExtension.MESSAGE_MODE == GameExtension.DEBUG then
+function GameExtension:addLogState(name, show)
+	if self.debugCategories[name] == nil then
+		self.debugCategories[name] = show;
+	end;
+end;
+
+function GameExtension:setLogState(name, show)
+	self.debugCategories[name] = show;
+end;
+
+function GameExtension:getLogState(name)
+	if self.debugCategories[name] ~= nil then
+		return self.debugCategories[name];
+	end;
+
+	return false;
+end;
+
+function GameExtension:log(category, message)
+	if self:getLogState(category) then
+		print("  GameExtension ( v" .. self.version .. " ) - " .. category .. ": " .. tostring(message));
+	end;
+end;
+
+function GameExtension:logTable(t, name, depth, start)
+	if self:getLogState("Debug") then
 		if t ~= nil then
 			if type(t) == "table" then
-				local i = 0;
+				local gotSomething = false;
+
 				for _ in pairs(t) do
-					i = i + 1;
+					gotSomething = true;
 					break;
 				end;
 				
-				if i == 0 then
-					log("NOTICE", "logTable(" .. tostring(t) .. ") dont have any rows to print.");
+				if not gotSomething then
+					self:log("Notice", "logTable(" .. tostring(t) .. ") dont have any rows to print.");
 				end;
 				
-				DebugUtil.printTableRecursively(t, Utils.getNoNil(name, ""), 0, Utils.getNoNil(depth, 3));
+				DebugUtil.printTableRecursively(t, Utils.getNoNil(name, ""), Utils.getNoNil(start, 0), Utils.getNoNil(depth, 1));
 			else
-				log("DEBUG", Utils.getNoNil(name, "") .. t);
+				self:log("Debug", Utils.getNoNil(name, "") .. t);
 			end;
 		else
-			log("ERROR", "logTable() didnt receive any table.");
+			self:log("Error", "logTable() didnt receive any table.");
 		end;
 	end;
 end;
 
--- Show message on screen real time
--- 	 showMessage("testing", "now what?");
-function showMessage(name, message)
-	addMessage(name, message, nil, true); -- replace value 
-end;
+function GameExtension:renderMessage(id, value, name, shownName)
+	-- 1. Render actual value
+	-- 2. Fetch value from object
+	
+	if id == 1 then 
+		self.visualDebug[name] = {value = value, shownName = shownName};
 
--- Show message on screen, Usage examples
--- (fetch variable value)
--- 	  addMessage("moneyUnit", g_currentMission.missionInfo);
--- (fetch variable value with custom name)
--- 	  addMessage("Our money unit:", g_currentMission.missionInfo, "moneyUnit");
-function addMessage(name, parent, variable, replace)
-	if GameExtension.MESSAGE_MODE == GameExtension.DEBUG then
-		if GameExtension.visualDebug[name] == nil then
-			GameExtension.visualDebug[name] = {var = Utils.getNoNil(variable, name), parent = parent};
-		else
-			if replace ~= nil and replace then
-				GameExtension.visualDebug[name].parent = parent;
-			end;
+	elseif id == 2 then 
+		if self.visualDebug[name] == nil then
+			self.visualDebug[name] = {object = value[1], variableName = value[2], shownName = shownName}; -- Value is an table {object, variableName}
 		end;
 	end;
 end;
 
-function removeMessage(name)
-	GameExtension.visualDebug[name] = nil;
+function GameExtension:removeMessage(name)
+	self.visualDebug[name] = nil;
 end;
-
 
 function GameExtension:renderVisualDebugMessages()
-	if GameExtension.MESSAGE_MODE == GameExtension.DEBUG then
+	if self:getLogState("Debug") then
 		local strs;
 		
-		for name, v in pairs(GameExtension.visualDebug) do
+		for name, v in pairs(self.visualDebug) do
 			if strs == nil then
 				strs = {"Name\n", "Value\n"};
 			end;
 			
-			strs[1] = strs[1] .. string.format("%s\n", name);
+			strs[1] = strs[1] .. string.format("%s\n", Utils.getNoNil(v.shownName, name));
 			
-			if type(v.parent) == "table" then
-				if v.parent[v.var] ~= nil then
-					strs[2] = strs[2] .. string.format(": %s\n", tostring(v.parent[v.var]));
+			if v.object ~= nil then
+				if v.object[v.variableName] ~= nil then
+					strs[2] = strs[2] .. string.format(": %s\n", tostring(v.object[v.variableName]));
 				else
-					strs[2] = strs[2] .. string.format(": %s\n", "----");
+					strs[2] = strs[2] .. string.format(": %s\n", "--> Empty <--");
 				end;
 			else
-				strs[2] = strs[2] .. string.format(": %s\n", tostring(v.parent));
+				strs[2] = strs[2] .. string.format(": %s\n", tostring(v.value));
 			end;
 		end;
 		
@@ -114,4 +133,14 @@ function GameExtension:renderVisualDebugMessages()
 			Utils.renderMultiColumnText(0.01, 0.8, getCorrectTextSize(0.013), strs, 0.008, {RenderText.ALIGN_LEFT, RenderText.ALIGN_LEFT});
 		end;
 	end;
+end;
+
+
+-- We should have deleted all reference to this but lets keep it for a while longer
+function log(mode, message)
+	g_gameExtension:log("Notice", "An function is calling old function for log");
+end;
+
+function logTable(t, depth, name)
+	g_gameExtension:log("Notice", "An function is calling old function for logTable");
 end;

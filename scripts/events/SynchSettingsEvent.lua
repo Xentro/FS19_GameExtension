@@ -26,16 +26,16 @@ end;
 
 function SynchSettingsEvent:readStream(streamId, connection)
 	if connection:getIsServer() then -- client
-		log("DEBUG", "Synch Settings - Starting to recive update from server");
+		g_gameExtension:log("Debug MultiPlayer", "Starting to recive update from server");
 		
 		local numModules = streamReadInt16(streamId);
-		log("DEBUG", "Synch Settings - We got " .. numModules .. " modules to update.");
+		g_gameExtension:log("Debug MultiPlayer", "We got " .. numModules .. " modules to update.");
 		
 		for i = 1, numModules do
 			local moduleName  = streamReadString(streamId);
 			local numSettings = streamReadInt16(streamId);
 			
-			log("DEBUG", "Synch Settings - Reading: Module ( " .. moduleName .. " ), num settings ( " .. numSettings .. " )");
+			g_gameExtension:log("Debug MultiPlayer", "Reading: Module ( " .. moduleName .. " ), num settings ( " .. numSettings .. " )");
 			
 			for k = 1, numSettings do
 				local name 		 = streamReadString(streamId);
@@ -52,7 +52,7 @@ function SynchSettingsEvent:readStream(streamId, connection)
 					value = streamReadBool(streamId);
 				end;
 				
-				log("DEBUG", "Synch Settings -   Reading: " .. name .. ", value: " .. tostring(value) .. ", type: " .. tostring(formatType));
+				g_gameExtension:log("Debug MultiPlayer", "  Reading: " .. name .. ", value: " .. tostring(value) .. ", type: " .. tostring(formatType));
 				g_gameExtension:setSetting(moduleName, name, value, true);
 			end;
 		end;
@@ -64,8 +64,8 @@ function SynchSettingsEvent:writeStream(streamId, connection)
 		-- Update table information if something have been deactivated
 		SynchSettingsEvent.updateServerModules();
 		
-		log("DEBUG", "Synch Settings - Starting to send update to clients");
-		log("DEBUG", "Synch Settings - We are sending " .. #SynchSettingsEvent.ServerModules .. " modules updates to client.");
+		g_gameExtension:log("Debug MultiPlayer", "Starting to send update to clients");
+		g_gameExtension:log("Debug MultiPlayer", "We are sending " .. #SynchSettingsEvent.ServerModules .. " modules updates to client.");
 		
 		streamWriteInt16(streamId, #SynchSettingsEvent.ServerModules);
 		
@@ -73,10 +73,10 @@ function SynchSettingsEvent:writeStream(streamId, connection)
 			streamWriteString(streamId, v.moduleName);
 			streamWriteInt16(streamId,  v.numSettings);
 			
-			log("DEBUG", "Synch Settings - 	Writing: Module ( " .. v.moduleName .. " ), num settings ( " .. v.numSettings .. " )");
+			g_gameExtension:log("Debug MultiPlayer", "	Writing: Module ( " .. v.moduleName .. " ), num settings ( " .. v.numSettings .. " )");
 			
 			for k, s in ipairs(v.settings) do
-				log("DEBUG", "Synch Settings -   	Writing: " .. s.name .. ", value: " .. tostring(s.value) .. ", type: " .. tostring(s.inputType));
+				g_gameExtension:log("Debug MultiPlayer", "  	Writing: " .. s.name .. ", value: " .. tostring(s.value) .. ", type: " .. tostring(s.inputType));
 				
 				streamWriteString(streamId, s.name);
 				streamWriteString(streamId, s.inputType);
@@ -92,7 +92,7 @@ function SynchSettingsEvent:writeStream(streamId, connection)
 				end;
 			end;
 			
-			log("DEBUG", "");
+			g_gameExtension:log("Debug MultiPlayer", ""); -- Line breaker
 		end;
 	end;
 end;
@@ -101,7 +101,7 @@ function SynchSettingsEvent:run(connection)
 end;
 
 function SynchSettingsEvent.updateServerModules()
-	log("DEBUG", "Synch Settings - Creating list of modules to send");
+	g_gameExtension:log("Debug MultiPlayer", "Creating list of modules to send");
 	
 	SynchSettingsEvent.ServerModules = {};
 	
@@ -117,7 +117,7 @@ function SynchSettingsEvent.updateServerModules()
 				end;
 			end;
 			
-			log("DEBUG", "Synch Settings - 	Module ( " .. m.name .. " ) has ( " .. num .. " ) settings to be sent");
+			g_gameExtension:log("Debug MultiPlayer", "	Module ( " .. m.name .. " ) has ( " .. num .. " ) settings to be sent");
 			table.insert(SynchSettingsEvent.ServerModules, {moduleName = m.name, numSettings = num, settings = settings});
 		end;
 	end;
@@ -130,10 +130,10 @@ if Utils.playerJoinEventsToSend == nil then
 	
 	local oldSendObjects = Server.sendObjects;
 	function Server:sendObjects(connection, ...)
-		log("DEBUG", "Synch Settings - Synching all settings with playes! (playerJoinEventsToSend)");
+		g_gameExtension:log("Debug MultiPlayer", "Synching all settings with playes! (playerJoinEventsToSend)");
 		
 		for _, class in ipairs(Utils.playerJoinEventsToSend) do
-			log("DEBUG", "Server.sendObjects - Calling event class!");
+			g_gameExtension:log("Debug MultiPlayer", "Server.sendObjects - Calling event class!");
 			
 			connection:sendEvent(class:new());
 		end;
@@ -141,7 +141,5 @@ if Utils.playerJoinEventsToSend == nil then
 		oldSendObjects(self, connection, ...);
 	end;
 end;
-
-
 
 table.insert(Utils.playerJoinEventsToSend, SynchSettingsEvent); -- Add to synch table

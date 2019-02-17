@@ -56,7 +56,7 @@ function GameExtension:addModule(name, object, settings, callClassLocally)
 		table.insert(self.modules, entry);
 		self.moduleToIndex[name] = #self.modules;
 	else
-		log("ERROR", "Module - The module " .. name .. " already exist's.");
+		self:log("Error", "Module - The module " .. name .. " already exist's.");
 	end;
 end;
 
@@ -67,7 +67,7 @@ function GameExtension:deactivateModule(name, modName)
 		m.isActive = false;
 		self:addBlackListItem(name, GameExtension.BL_STATE_NOTHING);
 		
-		log("NOTICE", "Module " .. name .. " is being deactivated by the mod " .. Utils.getNoNil(modName, "MISSING_MOD_NAME"));
+		self:log("Notice", "Module " .. name .. " is being deactivated by the mod " .. Utils.getNoNil(modName, "MISSING_MOD_NAME"));
 	end;
 end;
 
@@ -91,10 +91,10 @@ function GameExtension:getSetting(name, settingName, getTable)
 				return m.settings[idx];
 			end;
 		else
-			log("ERROR", "Setting ( " .. tostring(settingName) .. " ) Don't exist.");
+			self:log("Error", "Setting ( " .. tostring(settingName) .. " ) Don't exist.");
 		end;
 	else
-		log("ERROR", "Module ( " .. tostring(name) .. " ) Don't exist.");
+		self:log("Error", "Module ( " .. tostring(name) .. " ) Don't exist.");
 	end;
 	
 	return nil;
@@ -136,7 +136,7 @@ function GameExtension:addSetting(settings, t)
 	
 	if (entry.inputType == Types["FLOAT"] or entry.inputType == Types["INT"]) and blackListState == GameExtension.BL_STATE_NORMAL then
 		if t.options ~= nil and t.optionsText then
-			log("WARNING", "Setting " .. entry.name .. " have both options and optionsText, will use options.")
+			self:log("Warning", "Setting " .. entry.name .. " have both options and optionsText, will use options.")
 		end;
 		
 		if t.options ~= nil then
@@ -150,7 +150,7 @@ function GameExtension:addSetting(settings, t)
 		end;
 		
 		if entry.options == nil then
-			log("ERROR", "Options are empty for setting " .. entry.name .. " which aren't allowed for Float and Int types. Settings won't be added.");
+			self:log("Error", "Options are empty for setting " .. entry.name .. " which aren't allowed for Float and Int types. Settings won't be added.");
 			return settings;
 		end;
 	end;
@@ -159,7 +159,7 @@ function GameExtension:addSetting(settings, t)
 		table.insert(settings, entry);
 		
 		self.settingToIndex[entry.name] = #settings;
-		log("DEBUG", "Adding setting index: " .. self.settingToIndex[entry.name] .. ",		type: " .. entry.inputType .. ",	" .. entry.name .. ",		value: " .. tostring(entry.value));
+		self:log("Debug", "  Adding setting index: " .. self.settingToIndex[entry.name] .. ", type: " .. entry.inputType .. ", " .. entry.name .. ", value: " .. tostring(entry.value));
 		
 		-- Return current table for more settings
 		return settings;
@@ -189,7 +189,7 @@ function GameExtension:setSetting(moduleName, name, newValue, noEventSend, first
 							m.object[s.func](self, newValue); 				-- Let us access everything within Game Extension
 						end;
 					else
-						log("ERROR", "The function ( " .. s.func .. " ) for setting ( " .. name .. " ) don't exist.");
+						self:log("Error", "The function ( " .. s.func .. " ) for setting ( " .. name .. " ) don't exist.");
 					end;
 				end;
 				
@@ -211,11 +211,11 @@ function GameExtension:setSetting(moduleName, name, newValue, noEventSend, first
 			table.insert(m.settings, newValue);
 			self.settingToIndex[name] = #m.settings;
 			
-			log("DEBUG", "Adding setting type: " .. m.settings[self.settingToIndex[name]].inputType .. ",	" .. name .. ",		value: " .. tostring(m.settings[self.settingToIndex[name]].value));
+			self:log("Debug", "Adding setting type: " .. m.settings[self.settingToIndex[name]].inputType .. ",	" .. name .. ",		value: " .. tostring(m.settings[self.settingToIndex[name]].value));
 		end;
 	else
 		-- Module don't exist
-		-- log("ERROR", "Trying to change value for an setting in the module ( " .. tostring(moduleName) .. " ) but it doesn't exist.");
+		-- self:log("Error", "Trying to change value for an setting in the module ( " .. tostring(moduleName) .. " ) but it doesn't exist.");
 	end;
 end;
 
@@ -246,24 +246,24 @@ end;
 -- Setup, Load, Save Settings --
 
 function GameExtension:saveFile(filename, isServer)
+	self:log("Debug Save / Load", "Saving is starting  " .. filename);
+
 	local xmlFile = createXMLFile("savingGameExtension", filename, "GameExtension");
 	local i = 0;
-	
-	-- logTable(GameExtension.blackListState);
-	
+
 	for _, m in ipairs(self.modules) do
-		if self:getBlackListItem(m.name) ~= GameExtension.BL_STATE_NOTHING then
-			-- log("DEBUG", "reading module " .. m.name .. " - isServer: " .. tostring(isServer));
-			
+		local listState = self:getBlackListItem(m.name);
+
+		if listState ~= GameExtension.BL_STATE_NOTHING then
+			self:log("Debug Save / Load", "  Reading Module	" .. m.name);
 			local key, valid = string.format("GameExtension.module(%d)", i), false;
 			
 			local subI = 0;
 			for k, s in ipairs(m.settings) do
 				local subKey = string.format(key .. ".setting(%d)", subI);
-				
-				if self:getBlackListItem(s.name) ~= GameExtension.BL_STATE_NOTHING then
-					-- log("DEBUG", "	reading setting " .. s.name .. " 	- page: " .. tostring(s.page) .. " 	- event: " .. tostring(s.event));
-					
+				listState = self:getBlackListItem(s.name);
+
+				if listState ~= GameExtension.BL_STATE_NOTHING then
 					if isServer and s.event 					-- Server File
 					or not isServer and not s.event then		-- Client File
 						setXMLString(xmlFile, subKey .. "#name", s.name);
@@ -276,8 +276,10 @@ function GameExtension:saveFile(filename, isServer)
 						valid = true;
 						subI = subI + 1;
 						
-						-- log("DEBUG", "		" .. s.name .. " - " .. tostring(s.value));
+						self:log("Debug Save / Load", "     Saving setting: " .. s.name .. ", value: " .. tostring(s.value));
 					end;
+				else
+					self:log("Debug Save / Load", "     Setting ( " .. s.name .. " ) is black listed ( " .. listState .. " ), setting won't be saved.");
 				end;
 			end;
 			
@@ -285,23 +287,29 @@ function GameExtension:saveFile(filename, isServer)
 				setXMLString(xmlFile, key .. "#name", m.name);
 				i = i + 1;
 			end;
+		else
+			self:log("Debug Save / Load", "  Module ( " .. m.name .. " ) is black listed ( " .. listState .. " ), settings in this module won't be saved.");
 		end;
 	end;
 	
 	if i > 0 then -- save XML if we got something to save..
 		if not saveXMLFile(xmlFile) then
-			log("ERROR", "Something failed during saving, Can't save settings - xmlFile: " .. xmlFile .. ", File: " .. filename);
+			self:log("Error", "Something failed during saving, Can't save file!");
 		else
-			-- log("DEBUG", "Saved Settings - xmlFile ID: " .. xmlFile .. " - File Exists: " .. tostring(fileExists(filename)) .. " - File Path: " .. filename);
+			self:log("Debug Save / Load", "Succesfully saved settings!");
 		end;
+	else
+		self:log("Debug Save / Load", "There is nothing to save!");
 	end;
 	
 	delete(xmlFile);
 end;
 
-function GameExtension:loadSettingXML(xmlPath)
-	if fileExists(xmlPath) then
-		local xmlFile = loadXMLFile("GameExtension", xmlPath);
+function GameExtension:loadSettingXML(filename)
+	self:log("Debug Save / Load", "Loading is starting  " .. filename);
+
+	if fileExists(filename) then
+		local xmlFile = loadXMLFile("GameExtension", filename);
 		local i = 0;
 		
 		while true do
@@ -333,10 +341,11 @@ function GameExtension:loadSettingXML(xmlPath)
 			
 			i = i + 1;
 		end;
-		
+
+		self:log("Debug Save / Load", "Succesfully loaded settings!");
 		delete(xmlFile);
 	else
-		log("DEBUG", "Settings - Failed to load ( Saved ) settings, file don't exist " .. xmlPath);
+		self:log("Debug Save / Load", "Failed to load settings, file don't exist!");
 	end;
 end;
 
@@ -373,7 +382,7 @@ function GameExtension:sendSettingsToMenu()
 							
 							g_gameExtensionMenu:addSettingsToPage(s.page, entry);
 						else
-							log("ERROR", "Menu - Missing pageData for page ( ".. s.page .." ), page couldn't be created.");
+							self:log("Error", "Menu - Missing pageData for page ( ".. s.page .." ), page couldn't be created.");
 						end;
 					end;
 				end;

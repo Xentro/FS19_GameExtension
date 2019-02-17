@@ -48,13 +48,13 @@ function SetSettingEvent:readStream(streamId, connection)
 		self.value = streamReadBool(streamId);
 	end;
 	
-	log("DEBUG", " Reading event - " .. tostring(self.moduleName) .. " - " .. tostring(self.settingName) .. ", type: " .. tostring(self.type) .. ", value: " .. tostring(self.value));
+	g_gameExtension:log("Debug MultiPlayer", " Reading event - " .. tostring(self.moduleName) .. " - " .. tostring(self.settingName) .. ", type: " .. tostring(self.type) .. ", value: " .. tostring(self.value));
 	
     self:run(connection);
 end;
 
 function SetSettingEvent:writeStream(streamId, connection)
-	log("DEBUG", " Writing Event - " .. tostring(self.moduleName) .. " - " .. tostring(self.settingName) .. ", type: " .. tostring(self.type) .. ", value: " .. tostring(self.value));
+	g_gameExtension:log("Debug MultiPlayer", " Writing Event - " .. tostring(self.moduleName) .. " - " .. tostring(self.settingName) .. ", type: " .. tostring(self.type) .. ", value: " .. tostring(self.value));
 	
 	streamWriteString(streamId, self.moduleName);
 	if streamWriteBool(streamId, self.settingName ~= nil) then

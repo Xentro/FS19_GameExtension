@@ -116,7 +116,7 @@ end;
 
 function GameExtensionMenu:addSetting(item, pageName)
 	if self.settingNameToIndex[item.name] ~= nil then
-		log("ERROR", "Menu: The setting name your trying to add ( " .. item.name .. " ) is already added, it must be an unique name.");
+		log("Error Menu", "The setting name your trying to add ( " .. item.name .. " ) is already added, it must be an unique name.");
 		return;
 	end;
 	
@@ -125,7 +125,7 @@ function GameExtensionMenu:addSetting(item, pageName)
 		if Types[item.inputType:upper()] ~= nil then
 			item.inputType = Types[item.inputType:upper()]; -- Make sure the formating is what we expect.
 		else
-			log("ERROR", "Menu: inputType for setting " .. item.name .. " aren't valid, only float, int or bool.");
+			log("Error Menu", "InputType for setting " .. item.name .. " aren't valid, only float, int or bool.");
 			return;
 		end;
 	end;
@@ -141,7 +141,7 @@ function GameExtensionMenu:addSettingsToPage(name, p)
 		if p.pageName ~= nil then
 			self:addPage(name, p.pageName, p.isAdminPage);
 		else
-			log("ERROR", "Menu - The page your trying to add ( " .. name .. " ) is missing data and won't be created.");
+			log("Error Menu", "The page your trying to add ( " .. name .. " ) is missing data and won't be created.");
 		end;
 	end;
 	
@@ -207,7 +207,7 @@ end;
 ------------------------------------------------------------
 
 function GameExtensionMenu:flushSettings()
-	log("DEBUG", "Menu - Flushing settings");
+	g_gameExtension:log("Debug Menu", "Flushing settings");
 	
 	for _, element in ipairs(self.pages) do
 		for _, v in ipairs(element[GameExtensionMenu.PAGES_SETTING]) do
@@ -229,7 +229,7 @@ function GameExtensionMenu:flushSettings()
 end;
 
 function GameExtensionMenu:reloadSettings()
-	log("DEBUG", "Menu - reloadSettings() ");
+	g_gameExtension:log("Debug Menu", "ReloadSettings() ");
 	
 	self:flushSettings();
 	self:initializeSettings();

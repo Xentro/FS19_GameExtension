@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="42">
     <author>Xentro</author>
-    <version>0.6.2.1</version>
+    <version>0.6.3.1</version>
 	<title><en>Game Extension</en></title>
 	
 	<description>
@@ -42,15 +42,23 @@
     <extraSourceFiles>
         <sourceFile filename="scripts/GameExtension.lua"/>
     </extraSourceFiles>
-	
-	<!-- 
-		ERROR 		= 0
-		WARNING 	= 1
-		NOTICE 		= 2
-		DEBUG 		= 3
-	-->
-	<gameExtension debug="3">
-        <sourceFile filename="scripts/modules/Misc.lua"/>
+
+	<gameExtension>
+        <debug>
+			<category name="Error">
+				<category name="Menu"/>
+			</category>
+			<category name="Warning"/>
+			<category name="Notice"/>
+
+			<category name="Debug" show="true">
+				<category name="MultiPlayer"/>
+				<category name="Save / Load" show="false"/>
+				<category name="Menu"/>
+			</category>
+		</debug>
+
+		<sourceFile filename="scripts/modules/Misc.lua"/>
         <sourceFile filename="scripts/modules/Player.lua"/>
         <!-- <sourceFile filename="scripts/modules/Vehicle.lua"/> -->
 	</gameExtension>

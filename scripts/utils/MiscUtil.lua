@@ -15,18 +15,13 @@ Types = {
 	BOOL		= "Bool"
 };
 
-
-function GameExtension:loadModDescData()
-	local xmlFile = loadXMLFile("GEmodDesc", Utils.getFilename("modDesc.xml", self.modDirectory));
-	
-	GameExtension.MESSAGE_MODE = Utils.getNoNil(getXMLInt(xmlFile, "modDesc.gameExtension#debug"), GameExtension.MESSAGE_MODE);
-	
-	if GameExtension.MESSAGE_MODE == GameExtension.DEBUG then
-		log("NOTICE", "Debug mode is activated.");
+function GameExtension:loadModDescData(xmlFile)
+	if self:getLogState("Debug") then
+		self:log("Notice", "Debug mode is activated.");
 
 		local v = getXMLInt(xmlFile, "modDesc#descVersion"); 
 		if v < g_maxModDescVersion then
-			log("NOTICE", "Current descVersion is ( " .. v .. " ), we should change this to ( " .. g_maxModDescVersion .. " )");
+			self:log("Notice", "Current descVersion is ( " .. v .. " ), we should change this to ( " .. g_maxModDescVersion .. " )");
 		end;
 	end;
 	
@@ -41,17 +36,15 @@ function GameExtension:loadModDescData()
 			filename = Utils.getFilename(filename, self.modDirectory);
 			
 			if fileExists(filename) then
-				log("DEBUG", "We are loading source file - " .. filename);
+				self:log("Debug", "We are loading source file - " .. filename);
 				source(filename);
 			else
-				log("ERROR", "An attempt to load file ( " .. filename .. " ) has failed due to file don't exist.");
+				self:log("Error", "An attempt to load file ( " .. filename .. " ) has failed due to file don't exist.");
 			end;
 		end;
 		
 		i = i + 1;
 	end;
-	
-	delete(xmlFile);
 end;
 
 function GameExtension:getIsActiveForInput()
@@ -121,7 +114,7 @@ function GameExtension:addTextToGlobal(name)
 	if g_i18n:hasText(name) then
 		getfenv(0).g_i18n.texts[name] = g_i18n:getText(name);
 	else
-		log("ERROR", "Can't make text ( " .. tostring(name) .. " ) global as it can't be found!");
+		self:log("Error", "Can't make text ( " .. tostring(name) .. " ) global as it can't be found!");
 	end;
 end;
 
@@ -154,12 +147,12 @@ function GameExtension:addSpecialization(name, filename)
 		
 		if spec ~= nil then
 			self.specializations[name] = {filename = filename, object = spec, stopCall = false};
-			log("DEBUG", "Specialization " .. name .. " have been added.");
+			self:log("Debug", "Specialization " .. name .. " have been added.");
 		else
-			log("ERROR", "Specialization - Failed to load vehicle class " .. name);
+			self:log("Error", "Specialization - Failed to load vehicle class " .. name);
 		end;
 	else
-		log("ERROR", "Specialization - File don't exist. " .. filename);
+		self:log("Error", "Specialization - File don't exist. " .. filename);
 	end;
 end;
 

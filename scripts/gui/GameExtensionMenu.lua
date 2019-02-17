@@ -195,7 +195,7 @@ end;
 
 function GameExtensionMenu:initializeSettings()
 	if self.settingsAreInitialized then return true; end;
-	log("DEBUG", "Menu - initializeSettings() ");
+	g_gameExtension:log("Debug Menu", "InitializeSettings()");
 	
 	-- Hide templates
 	self:setElementVisible(self.pageSettingsTemplate, false);
@@ -253,7 +253,7 @@ function GameExtensionMenu:createPage(pageName, items)
 	end;
 	
 	lastTableIndex[lastItem] = lastItem; -- We havent reached page limit, add last setting
-	log("DEBUG", "Menu: We have " .. numSettings .. " settings for page ( " .. pageName .. " )");
+	g_gameExtension:log("Debug Menu", "We have " .. numSettings .. " settings for page ( " .. pageName .. " )");
 	
 	if numSettings == 0 then
 		self:clonePage(); -- Create page even if no settings
@@ -334,7 +334,7 @@ function GameExtensionMenu:linkSettingsElements()
 				FocusManager:linkElements(element, FocusManager.TOP, settings[top]);
 				FocusManager:linkElements(element, FocusManager.BOTTOM, settings[bottom]);
 				
-				-- log("DEBUG", "Menu: Page " .. self.pageDataIntToName[i] .. " - Linking setting " .. element.name .. " (" .. currentItem .. " / " .. element.focusId .. ") 	to setting " .. settings[top].name .. " (" .. top .. " / " .. settings[top].focusId .. ") 	and " .. settings[bottom].name .. " (".. bottom .. " / " .. settings[bottom].focusId .. ")");
+				-- g_gameExtension:log("Debug Menu", "Page " .. self.pageDataIntToName[i] .. " - Linking setting " .. element.name .. " (" .. currentItem .. " / " .. element.focusId .. ") 	to setting " .. settings[top].name .. " (" .. top .. " / " .. settings[top].focusId .. ") 	and " .. settings[bottom].name .. " (".. bottom .. " / " .. settings[bottom].focusId .. ")");
 			end;
 		end;
 	end;
@@ -440,14 +440,14 @@ function GameExtensionMenu:onClickSetSettingElement(value, element)
 			if s.func ~= nil then
 				s.func(s.parent, value);
 			else
-				log("NOTICE", "Menu: Your trying to set an variable trough the menu which aren't supported, you should make sure to add an function callback to setting " .. element.name);
+				log("Notice", "Menu: Your trying to set an variable trough the menu which aren't supported, you should make sure to add an function callback to setting " .. element.name);
 			end;
 		else
-			log("ERROR", "Failed onClickSetSettingElement() - Setting id ( " .. tostring(element.settingId) .. " ), Page " .. tostring(res[GameExtensionMenu.SPLIT_MODULE]));
+			log("Error Menu", "Failed onClickSetSettingElement() - Setting id ( " .. tostring(element.settingId) .. " ), Page " .. tostring(res[GameExtensionMenu.SPLIT_MODULE]));
 		end;
 	end;
 	
-	-- log("DEBUG", "Menu: Changing value: " .. tostring(value) .. " 	for ( " .. element.name .. " )");
+	-- g_gameExtension:log("Debug Menu", "Changing value: " .. tostring(value) .. " 	for ( " .. element.name .. " )");
 end;
 
 function GameExtensionMenu:setSettingValue(element, value, settings)
@@ -465,7 +465,7 @@ function GameExtensionMenu:setSettingValue(element, value, settings)
 			value = settings.parent[settings.variableName];
 			
 			if value == nil then
-				log("DEBUG", "Menu: setSettingValue() have an nil value for variable.");
+				g_gameExtension:log("Debug Menu", "setSettingValue() have an nil value for variable.");
 			end;
 		end;
 	else
@@ -490,7 +490,7 @@ function GameExtensionMenu:setSettingValue(element, value, settings)
 	local lockState = g_gameExtension:getLockState(nil, nil, settings);
 	element:setDisabled(lockState, false);
 	
-	-- log("DEBUG", "Menu: Updating setting element for ( " .. element.name .. " ) to ( " .. tostring(value) .. " ) - lockState " .. tostring(lockState));
+	-- g_gameExtension:log("Debug Menu", "Updating setting element for ( " .. element.name .. " ) to ( " .. tostring(value) .. " ) - lockState " .. tostring(lockState));
 end;
 
 

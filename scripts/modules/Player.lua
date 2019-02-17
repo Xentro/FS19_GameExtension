@@ -44,23 +44,6 @@ function M_Player:loadMap()
 end;
 
 function M_Player:update(dt)
-	if not self.firstTimeRun then
-		-- addMessage("isMenuVisible:", g_currentMission.hud, "isMenuVisible");
-		-- addMessage("isVisible:", g_currentMission.hud, "isVisible");
-		
-		-- addMessage("lastChatMessageTime", g_currentMission);
-		-- addMessage("time", g_currentMission);
-		-- addMessage("hideTime", g_currentMission.hud.chatWindow);
-		-- addMessage("printMyTest", self);
-		
-		-- self.printMyTest = 7500;
-	else
-		-- if g_currentMission.time > self.printMyTest then
-			-- self.printMyTest = g_currentMission.time + 7500;
-			-- g_currentMission:addChatMessage("Overlord", "The time is " .. math.floor(self.printMyTest));
-			-- log("DEBUG", "Adding message " .. math.floor(self.printMyTest));
-		-- end;
-	end;
 end;
 
 function M_Player:updateTick(dt)
@@ -155,7 +138,7 @@ end;
 -- equipHandtool
 
 function M_Player.onInputCycleHandTool(self, oldFunc, ...)
-	log("DEBUG", "Calling onInputCycleHandTool");
+	g_gameExtension:log("Debug", "Calling onInputCycleHandTool");
 	logTable(...);
 	
 	-- if not g_currentMission.chainsaw_adminOnly then

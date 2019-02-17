@@ -24,9 +24,7 @@ FolderPaths = {
 	vehicles 	= GameExtension.modDirectory .. "scripts/vehicles/"
 };
 
-source(Utils.getFilename("DebugUtil.lua", FolderPaths.utils));
-
-function GameExtension:init()
+function GameExtension:init(xmlFile)
 	-- Used in functions
 	self.classOverrides 	  = {}; -- Delay our overrides so that other mods can alter there behaviour
 	self.specializations 	  = {};
@@ -34,6 +32,23 @@ function GameExtension:init()
 	self.tempDisableSetting   = {};
 	self.actionEventInfo 	  = {};
 	self.actionEventNameToInt = {};
+	self.debugCategories	  = {};
+	self.visualDebug		  = {};
+
+	source(Utils.getFilename("DebugUtil.lua", FolderPaths.utils));
+	self:loadDebugCategories(xmlFile, "modDesc.gameExtension.debug");
+
+	-- Source Files --
+	source(Utils.getFilename("MiscUtil.lua", 			FolderPaths.utils));
+	source(Utils.getFilename("SettingsUtil.lua", 	   	FolderPaths.utils));
+	source(Utils.getFilename("SettingEvent.lua", 	  	FolderPaths.events));
+	source(Utils.getFilename("SynchSettingsEvent.lua", 	FolderPaths.events));
+	source(Utils.getFilename("GameExtensionMenu.lua", 		FolderPaths.gui));
+	source(Utils.getFilename("GameExtensionMenuUtil.lua", 	FolderPaths.gui));
+	
+	self:loadModDescData(xmlFile); -- Loading modules
+
+	source(Utils.getFilename("AddSpecialization.lua", 	FolderPaths.scripts)); -- Add the GameExtension Specialization
 end;
 
 function GameExtension:loadMap()
@@ -84,7 +99,7 @@ function GameExtension:update(dt)
 			if not GameExtension[name] then
 				v.oldClass[v.functionName] = Utils.overwrittenFunction(v.oldClass[v.functionName], v.newClass);
 			else
-				log("NOTICE", "Override for ( " .. name .. " ) have been successfully stopped.");
+				self:log("Notice", "Override for ( " .. name .. " ) have been successfully stopped.");
 			end;
 		end;
 		
@@ -131,7 +146,7 @@ function GameExtension:registerActionEvents()
 				v.callbackOnCreate(v.object, eventId);
 			end;
 		else
-			log("ERROR", "Failed to add InputAction ( " .. v.action .. " ), eventId ( " .. tostring(eventId) .. " ) for " .. v.name);
+			g_gameExtension:log("Error", "Failed to add InputAction ( " .. v.action .. " ), eventId ( " .. tostring(eventId) .. " ) for " .. v.name);
 		end;
 	end;
 end;
@@ -139,24 +154,15 @@ end;
 -- Only allow one instance of this mod!
 if g_gameExtension == nil then
 	getfenv(0)["g_gameExtension"] = GameExtension;
-	g_gameExtension:init();
 
-	-- Source Files --
-	source(Utils.getFilename("MiscUtil.lua", 			FolderPaths.utils));
-	source(Utils.getFilename("SettingsUtil.lua", 	   	FolderPaths.utils));
-	source(Utils.getFilename("SettingEvent.lua", 	  	FolderPaths.events));
-	source(Utils.getFilename("SynchSettingsEvent.lua", 	FolderPaths.events));
-	
-	source(Utils.getFilename("GameExtensionMenu.lua", 		FolderPaths.gui));
-	source(Utils.getFilename("GameExtensionMenuUtil.lua", 	FolderPaths.gui));
-	
-	g_gameExtension:loadModDescData();
-	source(Utils.getFilename("AddSpecialization.lua", 	FolderPaths.scripts)); -- Add the GameExtension Specialization
-	
+	local xmlFile = loadXMLFile("GEmodDesc", Utils.getFilename("modDesc.xml", g_gameExtension.modDirectory));
+	g_gameExtension:init(xmlFile);
+	delete(xmlFile);
+
 	FSBaseMission.registerActionEvents = Utils.appendedFunction(FSBaseMission.registerActionEvents, GameExtension.registerActionEvents);
-
+	
 	addModEventListener(GameExtension);
 else
-	log("ERROR", "There are multiply versions of this mod! This mod ( " .. GameExtension.modName .. " ) will now be disabled.");
+	g_gameExtension:log("Error", "There are multiply versions of this mod! This mod ( " .. GameExtension.modName .. " ) will now be disabled.");
 	GameExtension = nil;
 end;

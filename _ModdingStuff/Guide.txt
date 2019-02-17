@@ -50,3 +50,47 @@ ___ Add Custom Setting ___
 	
 	To use all the features of game extension such as saving and MP synchronizing then you should take an look on this file
 		GE_Test_Option_2.lua
+
+		
+___ Debuging ___
+
+	First thing first is to make sure that debuging is enabled and there are 2 ways to do that
+	1. Open modDesc of game extension and change this line
+			<category name="Debug" show="false">
+		to this
+			<category name="Debug" show="true">
+	
+	2. Activate debug from script
+		if g_gameExtension ~= nil then
+			g_gameExtension:setLogState("Debug", true);
+		end;
+
+	_ Render values on screen ___
+		There are 2 types 
+		1. Render the actual value you put into the function
+			g_gameExtension:renderMessage(1, value, name, shownName);
+
+			-- Code Example --
+				if g_gameExtension ~= nil then
+					g_gameExtension:renderMessage(1, value ~= nil, "Is value nil:", nil);
+				end;
+
+		2. Render an value from an table without the need to actually call this function every time to update the value
+			g_gameExtension:renderMessage(2, {self, "variableName"}, name, shownName);
+
+			-- Code Example --
+				self.testMe = true;
+				if g_gameExtension ~= nil then
+					g_gameExtension:renderMessage(2, {self, "testMe"}, self, "Test me is currently:");
+				end;
+
+		For both of these types this is true
+			name must be uniqe as only one can be render with that name
+			shownName is optional, if empty then we use name
+				the purpose of it is mainly due to if we are debuging an value from an vehicle which load the script multiply times then "name" must be uniqe otherwise only the last vehicle's values will be shown, using an table here is okey. 
+		
+		To remove the message from showing we use this
+				if g_gameExtension ~= nil then
+					g_gameExtension:removeMessage(name);
+				end;
+			Name being the name you used in renderMessage()
