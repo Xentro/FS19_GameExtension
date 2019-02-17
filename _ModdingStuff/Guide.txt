@@ -52,9 +52,9 @@ ___ Add Custom Setting ___
 		GE_Test_Option_2.lua
 
 		
-___ Debuging ___
+___ Debugging ___
 
-	First thing first is to make sure that debuging is enabled and there are 2 ways to do that
+	First thing first is to make sure that debugging is enabled and there are 2 ways to do that
 	1. Open modDesc of game extension and change this line
 			<category name="Debug" show="false">
 		to this
@@ -85,9 +85,9 @@ ___ Debuging ___
 				end;
 
 		For both of these types this is true
-			name must be uniqe as only one can be render with that name
+			name must be unique as only one can be render with that name
 			shownName is optional, if empty then we use name
-				the purpose of it is mainly due to if we are debuging an value from an vehicle which load the script multiply times then "name" must be uniqe otherwise only the last vehicle's values will be shown, using an table here is okey. 
+				the purpose of it is mainly due to if we are debugging an value from an vehicle which load the script multiply times then "name" must be unique otherwise only the last vehicle's values will be shown, using an table here is okay. 
 		
 		To remove the message from showing we use this
 				if g_gameExtension ~= nil then
