@@ -6,8 +6,8 @@
 		<text name="modDescription" 				text="Улучшите игру с помощью новых функций и меню, где вы сможете изменить работу этих функций." />
 		
 	<!-- GUI -->
-		<text name="input_TOGGLE_GUI_SCREEN" 		text="Game Extension: Меню" />
-		<text name="TOGGLE_GUI_SCREEN" 				text="Открытие меню Game Extension" />
+		<text name="input_TOGGLE_GE_MENU" 		text="Game Extension: Меню" />
+		<text name="TOGGLE_GE_MENU" 				text="Открытие меню Game Extension" />
 		<text name="CLIENT_SETTING_PAGE" 			text="Настройки клиента" /><!-- %i for page number -->
 		<text name="SERVER_SETTING_PAGE" 			text="Настройки сервера" /><!-- %i for page number -->
 		

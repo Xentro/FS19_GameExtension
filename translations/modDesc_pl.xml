@@ -6,8 +6,8 @@
 		<text name="modDescription" 				text="Ulepsz grę dzięki nowym funkcjom i menu, w którym będziesz mógł zmienić sposób działania funkcji." />
 		
 	<!-- GUI -->
-		<text name="input_TOGGLE_GUI_SCREEN" 		text="Game Extension: Przełączanie GUI" />
-		<text name="TOGGLE_GUI_SCREEN" 				text="Otwórz menu Game Extension" />
+		<text name="input_TOGGLE_GE_MENU" 			text="Game Extension: Przełączanie GUI" />
+		<text name="TOGGLE_GE_MENU" 				text="Otwórz menu Game Extension" />
 		<text name="CLIENT_SETTING_PAGE" 			text="Ustawienia klienta" />
 		<text name="SERVER_SETTING_PAGE" 			text="Ustawienia serwera" />
 		

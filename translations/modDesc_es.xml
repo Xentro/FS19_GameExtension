@@ -6,8 +6,8 @@
 		<text name="modDescription" 				text="Mejora el juego con nuevas características y un menú de partida donde podrás gestionar estas nuevas características." />
 		
 	<!-- GUI -->
-		<text name="input_TOGGLE_GUI_SCREEN" 		text="Game Extension: Alternar GUI" />
-		<text name="TOGGLE_GUI_SCREEN" 				text="Abrir menú Game Extension" />
+		<text name="input_TOGGLE_GE_MENU" 			text="Game Extension: Alternar GUI" />
+		<text name="TOGGLE_GE_MENU" 				text="Abrir menú Game Extension" />
 		<text name="CLIENT_SETTING_PAGE" 			text="Ajustes Cliente" /><!-- %i for page number -->
 		<text name="SERVER_SETTING_PAGE" 			text="Ajustes Servidor" /><!-- %i for page number -->
 		

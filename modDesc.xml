@@ -15,7 +15,7 @@
 	<l10n filenamePrefix="translations/modDesc" />
 	
 	<actions>
-		<action name="TOGGLE_GUI_SCREEN" category="SYSTEM"/>
+		<action name="TOGGLE_GE_MENU" category="SYSTEM"/>
 		
 		<action name="X_CRUISE_ACTIVATE" category="VEHICLE"/>
 		<action name="X_CRUISE_DOWN" 	 category="VEHICLE"/>
@@ -23,8 +23,8 @@
 	</actions>
 	
 	<inputBinding>
-		<actionBinding action="TOGGLE_GUI_SCREEN">
-			<binding device="KB_MOUSE_DEFAULT" input="KEY_i" />
+		<actionBinding action="TOGGLE_GE_MENU">
+			<binding device="KB_MOUSE_DEFAULT" input="KEY_lalt KEY_q" />
 			<binding device="0_XINPUT_GAMEPAD" input="BUTTON_5 BUTTON_9" />
 		</actionBinding>
 		

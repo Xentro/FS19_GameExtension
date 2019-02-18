@@ -6,8 +6,8 @@
 		<text name="modDescription" 				text="Improve the game with new features and an ingame menu where you will be able to change how the features work." />
 		
 	<!-- GUI -->
-		<text name="input_TOGGLE_GUI_SCREEN" 		text="Game Extension: Toggle GUI" />
-		<text name="TOGGLE_GUI_SCREEN" 				text="Open Game Extension menu" />
+		<text name="input_TOGGLE_GE_MENU" 			text="Game Extension: Toggle GUI" />
+		<text name="TOGGLE_GE_MENU" 				text="Open Game Extension menu" />
 		<text name="CLIENT_SETTING_PAGE" 			text="Client settings" /><!-- %i for page number -->
 		<text name="SERVER_SETTING_PAGE" 			text="Server settings" /><!-- %i for page number -->
 		
