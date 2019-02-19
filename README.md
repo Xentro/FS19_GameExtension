@@ -5,11 +5,11 @@ There is an included readme file which have the information you need such as how
 
 If you find all the debug text in the log an mess then open the modDesc.xml file and change this line
 ```
-<gameExtension debug="3">
+<category name="Debug" show="true">
 ```
 to
 ```
-<gameExtension debug="2">
+<category name="Debug" show="false">
 ```
 
 
