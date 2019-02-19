@@ -93,9 +93,13 @@ function GameExtension:getOptionsText(options)
 	return {valueToRow = valueToRow, rowToValue = rowToValue, isText = true};
 end;
 
-function GameExtension:getInputAction(name)
+function GameExtension:getInputAction(id)
+	return self.actionEventInfo[id];
+end;
+
+function GameExtension:getInputActionByName(name)
 	if self.actionEventNameToInt[name] ~= nil then
-		return self.actionEventNameToInt[name];
+		return self:getInputAction(self.actionEventNameToInt[name]);
 	end;
 
 	return nil;

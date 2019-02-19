@@ -52,8 +52,7 @@ function GameExtensionMenu:loadMenu()
 	g_gui:loadGui(FolderPaths.menu .. "GameExtensionMenu.xml", "GameExtensionMenu", g_gameExtensionMenu);
 	
 	local buttonStates  = {false, true, false, true, nil}; -- Up, Down, Always, Start Active, callbackState
-	g_gameExtension:addInputAction("GameExtension_Menu_Player",  Player.INPUT_CONTEXT_NAME,  InputAction.TOGGLE_GE_MENU, g_gameExtensionMenu, g_i18n:getText("TOGGLE_GE_MENU"), false, GameExtensionMenu.openMenu, M_Misc.callbackSetShowHelpButton, buttonStates);
-	-- g_gameExtension:addInputAction("GameExtension_Menu_Vehicle", Vehicle.INPUT_CONTEXT_NAME, InputAction.TOGGLE_GE_MENU, g_gameExtensionMenu, g_i18n:getText("TOGGLE_GE_MENU"), false, GameExtensionMenu.openMenu, M_Misc.callbackSetShowHelpButton, buttonStates);
+	g_gameExtension:addInputAction("GameExtension_Menu", nil, InputAction.TOGGLE_GE_MENU, g_gameExtensionMenu, g_i18n:getText("TOGGLE_GE_MENU"), false, GameExtensionMenu.openMenu, M_Misc.callbackSetShowHelpButton, buttonStates);
 end;
 
 function GameExtensionMenu:canOpenMenu()

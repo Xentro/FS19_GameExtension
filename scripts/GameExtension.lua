@@ -145,9 +145,8 @@ end;
 function GameExtension:registerActionEvents()
 	for name, v in pairs(g_gameExtension.actionEventInfo) do
 		-- g_inputBinding:beginActionEventsModification(v.context);
-		
 		local eventAdded, eventId = g_inputBinding:registerActionEvent(v.action, v.object, v.callback, v.buttonStates[1], v.buttonStates[2], v.buttonStates[3], v.buttonStates[4], v.buttonStates[5]);
-		
+
 		if eventAdded then
 			v.eventId = eventId;
 			

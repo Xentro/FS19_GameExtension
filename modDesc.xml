@@ -15,7 +15,7 @@
 	<l10n filenamePrefix="translations/modDesc" />
 	
 	<actions>
-		<action name="TOGGLE_GE_MENU" category="SYSTEM"/>
+		<action name="TOGGLE_GE_MENU" category="ONFOOT VEHICLE"/>
 		
 		<action name="X_CRUISE_ACTIVATE" category="VEHICLE"/>
 		<action name="X_CRUISE_DOWN" 	 category="VEHICLE"/>
