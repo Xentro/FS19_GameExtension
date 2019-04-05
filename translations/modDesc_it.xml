@@ -18,7 +18,7 @@ Registrati come server admin attraverso il menu Farm Management." />
 
 	<!-- Modules -->
 		<!-- Misc -->
-		<text name="SHOW_HELP_BUTTON" 				text="Mostra bottoni d'aiuto" />
+		<text name="SHOW_HELP_BUTTON" 				text="Mostra pulsanti nel menu aiuto" />
 		<text name="toolTip_SHOW_HELP_BUTTON" 		text="Indica se il pulsante per aprire il menu deve essere visualizzato nella finestra di aiuto." />
 		<text name="VEHICLE_TABBING" 				text="Passaggio nei veicoli" />
 		<text name="toolTip_VEHICLE_TABBING" 		text="Consentire o non il passaggio nei veicoli(trattori, auto, camion etc)." />
