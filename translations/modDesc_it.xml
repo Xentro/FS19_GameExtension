@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+	<texts>
+		<!-- with $l10n_modTitle we can access these trough modDesc but its not working very well due to minor bugs in base code -->
+		<text name="modTitle" 						text="Game Extension" />
+		<text name="modDescription" 				text="Migliora il gioco con nuove funzionalità e un menu in gioco dove tu potrai modificare come queste funzionlità lavorano" />
+
+	<!-- GUI -->
+		<text name="input_TOGGLE_GE_MENU" 			text="Game Extension: attiva/disattiva GUI" />
+		<text name="TOGGLE_GE_MENU" 				text="Apri menu Game Extension" />
+		<text name="CLIENT_SETTING_PAGE" 			text="Impostazioni Client" />
+		<text name="SERVER_SETTING_PAGE" 			text="Impostazioni Server" />
+
+		<text name="PAGE_HELP" 						text="Pagina di aiuto" />
+		<text name="PAGE_SETTING"	 				text="Pagina impostazioni" />
+		<text name="PAGE_LOGIN" 					text="Hai bisogno di registrarti per accedere a questa pagina!
+Registrati come server admin attraverso il menu Farm Management." />
+
+	<!-- Modules -->
+		<!-- Misc -->
+		<text name="SHOW_HELP_BUTTON" 				text="Mostra pulsanti nel menu aiuto" />
+		<text name="toolTip_SHOW_HELP_BUTTON" 		text="Indica se il pulsante per aprire il menu Game Extension deve essere visualizzato nella finestra di aiuto." />
+		<text name="VEHICLE_TABBING" 				text="Passaggio nei veicoli" />
+		<text name="toolTip_VEHICLE_TABBING" 		text="Consentire o non il passaggio nei veicoli(trattori, auto, camion etc)." />
+
+		<!-- Player -->
+		<text name="P_STRENGTH" 					text="Forza di sollevamento del giocatore" />
+		<text name="P_STRENGTH_SET_UNLIMITED"		text="Illimitata" />
+		<text name="toolTip_P_STRENGTH" 			text="Capacità di sollevamento del giocatore." />
+		<text name="P_DISTANCE" 					text="Distanza di presa dal giocatore" />
+		<text name="toolTip_P_DISTANCE" 			text="Quanto lontano possiamo afferrare l'oggetto." />
+		<text name="P_CROSSHAIR" 					text="Mirino giocatore" />
+		<text name="toolTip_P_CROSSHAIR" 			text="Imposta la visibilità del mirino." />
+		<text name="P_HIDE_CHAT" 					text="Nascondi finestra di chat" />
+		<text name="toolTip_P_HIDE_CHAT" 			text="Consentire o non alla finestra di chat di apparire quando un giocatore invia un messaggio." />
+		<text name="P_HIDE_PLAYER_NAMES" 			text="Nascondi nomi giocatori" />
+		<text name="toolTip_P_HIDE_PLAYER_NAMES" 	text="Consentire o non a visualizzare il nome del giocatore sopra la testa del personaggio." />
+
+		<!-- Vehicle -->
+		<text name="V_HUD_ACTIVE" 					text="Icone hud del veicolo" />
+		<text name="toolTip_V_HUD_ACTIVE" 			text="Icone aiuti visivi per veicoli." />
+
+		<!-- Cruise Control -->
+		<text name="input_X_CRUISE_ACTIVATE" 		text="Game Extension: attiva/disattiva cruise control" />
+		<text name="input_X_CRUISE_DOWN" 			text="Game Extension: Diminuisci velocità di crociera" />
+		<text name="input_X_CRUISE_UP" 				text="Game Extension: Aumenta velocità di crociera" />
+		<text name="CRUISE_ACTIVE" 					text="Cruise control" />
+		<text name="toolTip_CRUISE_ACTIVE" 			text="Cruise control controllato dal mouse." />
+		<text name="CRUISE_SCROOL_SPEED" 			text="Velocità Cruise control" />
+		<text name="toolTip_CRUISE_SCROOL_SPEED" 	text="Rateo di scorrimento per valore velocità." />
+	</texts>
+</l10n>
