@@ -31,7 +31,7 @@
 		<text name="P_DISTANCE" 					text="Расстояние захвата" />
 		<text name="toolTip_P_DISTANCE" 			text="На каком максимальном расстоянии игрок сможет захватить объект." />
 		<text name="P_CROSSHAIR" 					text="Точка по центру" />
-		<text name="toolTip_P_CROSSHAIR" 			text="Отключение точки по центру экрана" />
+		<text name="toolTip_P_CROSSHAIR" 			text="Отключение точки по центру экрана." />
 		<text name="P_HIDE_CHAT" 					text="Скрывать окно чата" />
 		<text name="toolTip_P_HIDE_CHAT" 			text="Должно ли окно чата появляться, когда игрок написал сообщение." />
 		<text name="P_HIDE_PLAYER_NAMES" 			text="Скрывать имена игроков" />
@@ -47,7 +47,7 @@
 		<text name="input_X_CRUISE_UP" 				text="Game Extension: Увеличить скорость круиз-контроля" />
 		<text name="CRUISE_ACTIVE" 					text="Круиз-контроль" />
 		<text name="toolTip_CRUISE_ACTIVE" 			text="Управление круиз-контролем мышью." />
-		<text name="CRUISE_SCROOL_SPEED" 			text="Скорость управления круиз-контролем" />
-		<text name="toolTip_CRUISE_SCROOL_SPEED" 	text="Степень изменения уровня круиз-контроля." />
+		<text name="CRUISE_SCROOL_SPEED" 			text="Шаг круиз-контроля" />
+		<text name="toolTip_CRUISE_SCROOL_SPEED" 	text="Шаг изменения уровня скорости круиз-контроля." />
 	</texts>
 </l10n>
